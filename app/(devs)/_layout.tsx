@@ -6,9 +6,7 @@ export default function TabLayout() {
   const theme = useTheme()
 
   return (
-    <Stack
-      
-    >
+    <Stack>
       <Stack.Screen
         name="index"
         options={{
@@ -24,8 +22,12 @@ export default function TabLayout() {
         }}
       />
       
-      
+      <Stack.Screen
+        name="[dev]"
+        options={{
+          title: "Developer"
+        }}
+      />
     </Stack>
-
-  )
+  );
 }

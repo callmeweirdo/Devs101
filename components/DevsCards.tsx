@@ -26,7 +26,7 @@ export function DevsCards(props: CardProps) {
         <Link href={{ pathname: "/(devs)/[dev]", params: { dev: "devvvvv" } }} >
         <Card elevate size="$4" bordered {...props} style={{ margin: "5px" }}>
       <Card.Header padded>
-        <H2>Dev101</H2>"/(devs)/[dev]"
+        <H2>Dev101</H2>
         <Paragraph theme="alt2">Now available</Paragraph>
       </Card.Header>
       <Card.Footer padded>
@@ -58,9 +58,7 @@ export function ResponsiveGrid({ children }: { children: React.ReactNode }) {
       space="$4"
     //   $sm={{ flexDirection: 'column', alignItems: 'center' }} // Stacks the cards in one column for small screens
       paddingHorizontal="$4"
-          paddingVertical="$4"
-          
-      // Using breakpoints for responsive grid layout
+    paddingVertical="$4"      // Using breakpoints for responsive grid layout
     //   $xxl={{ width: '33.33%' }} // 3 cards per row on large screens
       $xl={{ width: '33.33%' }}  // 3 cards per row
       $lg={{ width: '50%' }}     // 2 cards per row on medium screens

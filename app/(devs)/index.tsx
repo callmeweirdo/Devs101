@@ -14,7 +14,8 @@ const home = () => {
         width="100%"
         backgroundColor="$background"
         padding="$4"
-        borderRadius="$4"
+            borderRadius="$4"
+            // overflow="hidden" // Hide any scrollbars that might appear
         >
             <DevsCards />
             <DevsCards />

@@ -46,8 +46,8 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
 }
 
 function RootLayoutNav() {
-  const colorScheme = useColorScheme()
-  const theme = useTheme()
+  const colorScheme = useColorScheme();
+  const theme = useTheme();
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
@@ -90,7 +90,7 @@ function RootLayoutNav() {
             title: 'Explore Devs', // Custom Title
             tabBarIcon: ({ color }) => <Atom color={color} />, // Custom Icon (Atom from Lucide icons)
             tabBarLabel: 'Devs', // Label for the tab
-            headerShown: true, // Show header for this tab
+            headerShown: false, // Show header for this tab
             headerTitle: 'Developers Hub', // Custom header title
             headerRight: () => (
               <Link href="/" asChild>
@@ -101,7 +101,6 @@ function RootLayoutNav() {
             ),
           }}
         />
-      
       </Tabs>
     </ThemeProvider>
   )

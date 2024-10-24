@@ -3,12 +3,12 @@ import React from 'react';
 import { useLocalSearchParams } from 'expo-router';
 import { Stack, XStack, YStack } from 'tamagui';
 
-const Dev = () => {
+const DevHome = () => {
     const {dev} = useLocalSearchParams<{ dev: string }>();
   return (
       <>
         <View>
-            <XStack>
+            <XStack  gap="$4" elevation={10} >
                   <YStack>
                       <Text>Lorem ipsum dolor sit amet.</Text>
                   </YStack>
@@ -21,4 +21,4 @@ const Dev = () => {
   )
 }
 
-export default Dev;
+export default DevHome;
