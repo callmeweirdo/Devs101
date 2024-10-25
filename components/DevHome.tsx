@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, Image, StyleSheet } from 'react-native';
 import React from 'react';
 import { useLocalSearchParams } from 'expo-router';
 import { XStack, YStack, Button, Anchor } from 'tamagui';
@@ -11,7 +11,8 @@ const DevHome = () => {
       <XStack
         flex={1}
         gap="$4"
-        justifyContent="space-between"
+        justifyContent="center"
+        alignItems="center"
         $gtSm={{ flexDirection: 'row' }}  // Row direction for large screens
         $sm={{ flexDirection: 'column' }} // Column direction for small screens
       >
@@ -81,9 +82,11 @@ export default DevHome;
 // Custom Styles
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
+    height: '100%',
     paddingHorizontal: 16,
     paddingVertical: 16,
+    justifyContent: 'center',  // Center all content vertically
   },
   leftColumn: {
     borderRadius: 10,
