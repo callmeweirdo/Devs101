@@ -12,6 +12,51 @@ export function DevSkill() {
         scale={0.9}
         hoverStyle={{ scale: 0.925 }}
         pressStyle={{ scale: 0.875 }}
+          />
+          <DemoCard
+        animation="bouncy"
+        size="$4"
+        width={250}
+        height={300}
+        scale={0.9}
+        hoverStyle={{ scale: 0.925 }}
+        pressStyle={{ scale: 0.875 }}
+          />
+          <DemoCard
+        animation="bouncy"
+        size="$4"
+        width={250}
+        height={300}
+        scale={0.9}
+        hoverStyle={{ scale: 0.925 }}
+        pressStyle={{ scale: 0.875 }}
+          />
+          <DemoCard
+        animation="bouncy"
+        size="$4"
+        width={250}
+        height={300}
+        scale={0.9}
+        hoverStyle={{ scale: 0.925 }}
+        pressStyle={{ scale: 0.875 }}
+          />
+          <DemoCard
+        animation="bouncy"
+        size="$4"
+        width={250}
+        height={300}
+        scale={0.9}
+        hoverStyle={{ scale: 0.925 }}
+        pressStyle={{ scale: 0.875 }}
+          />
+          <DemoCard
+        animation="bouncy"
+        size="$4"
+        width={250}
+        height={300}
+        scale={0.9}
+        hoverStyle={{ scale: 0.925 }}
+        pressStyle={{ scale: 0.875 }}
       />
     </XStack>
   )
