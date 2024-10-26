@@ -13,43 +13,20 @@ const DevHome = () => {
         gap="$4"
         justifyContent="center"
         alignItems="center"
-        $gtSm={{ flexDirection: 'row' }}  // Row direction for large screens
-        $sm={{ flexDirection: 'column' }} // Column direction for small screens
+        $gtSm={{ flexDirection: 'row' }}  // Row for larger screens
+        $sm={{ flexDirection: 'column' }} // Column for smaller screens
       >
-        {/* Left Column (60% on large screens, 100% on small screens) */}
-        <YStack
-          flex={0.6}
-          style={styles.leftColumn}
-          bg="rgba(255, 255, 255, 0.8)"
-          padding="$4"
-          $sm={{ flex: 1 }}  // Take full width on small screens
-        >
-          <Text style={styles.title}>Hi, I'm {dev}</Text>
-          <Text style={styles.description}>
-            I'm a passionate developer specializing in web3 and mobile app development. 
-            I love building seamless, high-performance applications with cutting-edge technologies.
-          </Text>
-
-          <Text style={styles.subheading}>Contact Me</Text>
-          <Text>Email: developer@example.com</Text>
-          <Text>Location: Abuja, Nigeria</Text>
-
-          {/* Tip Button */}
-          <Button theme="blue" size="$4" marginTop="$4" onPress={() => alert('Tipped!')}>
-            Tip
-          </Button>
-        </YStack>
-
-        {/* Right Column (40% on large screens, 100% on small screens) */}
+        {/* Right Column (Profile Image and Social Links, 40% on large screens) */}
         <YStack
           flex={0.4}
           style={styles.rightColumn}
           bg="rgba(255, 255, 255, 0.8)"
           padding="$4"
           alignItems="center"
-          $sm={{ flex: 1 }}  // Take full width on small screens
+          justifyContent="center"
+          $sm={{ flex: 1 }}  // Full width on small screens
         >
-          {/* Profile Image Frame */}
+          {/* Profile Image */}
           <Image
             source={{ uri: 'https://cdn.dribbble.com/userupload/5859589/file/original-55534b3895c5e6fee63696b7418eade7.png?resize=752x' }}
             style={styles.profileImage}
@@ -72,6 +49,31 @@ const DevHome = () => {
             </Anchor>
           </XStack>
         </YStack>
+
+        {/* Left Column (Description and Contact Info, 60% on large screens) */}
+        <YStack
+          flex={0.6}
+          style={styles.leftColumn}
+          bg="rgba(255, 255, 255, 0.8)"
+          padding="$4"
+          justifyContent="center"
+          $sm={{ flex: 1 }}  // Full width on small screens
+        >
+          <Text style={styles.title}>Hi, I'm {dev}</Text>
+          <Text style={styles.description}>
+            I'm a passionate developer specializing in web3 and mobile app development.
+            I love building seamless, high-performance applications with cutting-edge technologies.
+          </Text>
+
+          <Text style={styles.subheading}>Contact Me</Text>
+          <Text>Email: developer@example.com</Text>
+          <Text>Location: Abuja, Nigeria</Text>
+
+          {/* Tip Button */}
+          <Button theme="blue" size="$4" marginTop="$4" onPress={() => alert('Tipped!')}>
+            Tip
+          </Button>
+        </YStack>
       </XStack>
     </View>
   );
@@ -82,8 +84,7 @@ export default DevHome;
 // Custom Styles
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
-    height: '100%',
+    height: '60%',
     paddingHorizontal: 16,
     paddingVertical: 16,
     justifyContent: 'center',  // Center all content vertically

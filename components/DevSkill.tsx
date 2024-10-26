@@ -1,32 +1,38 @@
 import type { CardProps } from 'tamagui';
-import { H3 } from 'tamagui';
-import { Button, Card, H2, Image, Paragraph, XStack } from 'tamagui';
+import { H2, H3, Button, Card, Image, Paragraph, XStack, YStack } from 'tamagui';
 
 export function DevSkill() {
   return (
-    <XStack
-      flexWrap="wrap"
-      justifyContent="center"
-      style={{ height: '60%' }}
-      paddingHorizontal="$4"
-      space
-    >
-      {Array.from({ length: 8 }).map((_, index) => (
-        <DemoCard
-          key={index}
-          animation="bouncy"
-          size="$4"
-          width="100%"
-          scale={0.9}
-          hoverStyle={{ scale: 0.925 }}
-          pressStyle={{ scale: 0.875 }}
-          $sm={{ width: '90%', height: 270 }}
-          $md={{ width: '45%', height: 270 }}
-          $lg={{ width: '23%', height: 270 }}  // For large screens
-          $xl={{ width: '23%', height: 270 }}  // For extra-large screens and above
-        />
-      ))}
-    </XStack>
+    <YStack space="$4" alignItems="center" paddingHorizontal="$4" paddingVertical="$6">
+      {/* Title Section */}
+      <H2 textAlign="center" color="$color" paddingBottom="$4">
+        Skills Section
+      </H2>
+
+      {/* Cards Container */}
+      <XStack
+        flexWrap="wrap"
+        justifyContent="center"
+        style={{ height: '60%' }}
+        space
+      >
+        {Array.from({ length: 8 }).map((_, index) => (
+          <DemoCard
+            key={index}
+            animation="bouncy"
+            size="$4"
+            width="100%"
+            scale={0.9}
+            hoverStyle={{ scale: 0.925 }}
+            pressStyle={{ scale: 0.875 }}
+            $sm={{ width: '90%', height: 270 }}
+            $md={{ width: '45%', height: 270 }}
+            $lg={{ width: '23%', height: 270 }}
+            $xl={{ width: '23%', height: 270 }}
+          />
+        ))}
+      </XStack>
+    </YStack>
   );
 }
 
