@@ -1,5 +1,65 @@
 import type { CardProps } from 'tamagui';
-import { H2, H3, Button, Card, Image, Paragraph, XStack, YStack } from 'tamagui';
+import { H2, H3, Button, Card, Image, Paragraph, Progress, XStack, YStack } from 'tamagui';
+import React from 'react';
+import { StyleSheet } from 'react-native';
+
+type Skill = {
+  name: string;
+  description: string;
+  imageUri: string;
+  proficiency: number; // Represented as a percentage
+};
+
+const skills: Skill[] = [
+  {
+    name: 'JavaScript',
+    description: 'Advanced in ES6+, asynchronous programming, and frameworks like React.',
+    imageUri: 'https://cdn-icons-png.flaticon.com/512/5968/5968292.png',
+    proficiency: 90,
+  },
+  {
+    name: 'React Native',
+    description: 'Experienced in building cross-platform mobile applications.',
+    imageUri: 'https://cdn-icons-png.flaticon.com/512/3334/3334886.png',
+    proficiency: 80,
+  },
+  {
+    name: 'Blockchain',
+    description: 'Skilled in developing and deploying smart contracts with Solidity.',
+    imageUri: 'https://cdn-icons-png.flaticon.com/512/197/197600.png',
+    proficiency: 70,
+  },
+  {
+    name: 'Git & GitHub',
+    description: 'Proficient in version control, collaboration, and Git workflows.',
+    imageUri: 'https://cdn-icons-png.flaticon.com/512/25/25231.png',
+    proficiency: 85,
+  },
+  {
+    name: 'Node.js',
+    description: 'Backend development with Express.js, REST APIs, and database integration.',
+    imageUri: 'https://cdn-icons-png.flaticon.com/512/919/919825.png',
+    proficiency: 75,
+  },
+  {
+    name: 'Web3',
+    description: 'Knowledge of Web3.js and blockchain-based applications.',
+    imageUri: 'https://cdn-icons-png.flaticon.com/512/876/876784.png',
+    proficiency: 65,
+  },
+  {
+    name: 'UI/UX Design',
+    description: 'Creating user-friendly interfaces with Figma and Adobe XD.',
+    imageUri: 'https://cdn-icons-png.flaticon.com/512/888/888887.png',
+    proficiency: 60,
+  },
+  {
+    name: 'Docker',
+    description: 'Containerization for application deployment and scaling.',
+    imageUri: 'https://cdn-icons-png.flaticon.com/512/919/919853.png',
+    proficiency: 70,
+  },
+];
 
 export function DevSkill() {
   return (
@@ -16,9 +76,10 @@ export function DevSkill() {
         style={{ height: '60%' }}
         space
       >
-        {Array.from({ length: 8 }).map((_, index) => (
-          <DemoCard
+        {skills.map((skill, index) => (
+          <SkillCard
             key={index}
+            skill={skill}
             animation="bouncy"
             size="$4"
             width="100%"
@@ -36,28 +97,68 @@ export function DevSkill() {
   );
 }
 
-export function DemoCard(props: CardProps) {
+interface SkillCardProps extends CardProps {
+  skill: Skill;
+}
+
+export function SkillCard({ skill, ...props }: SkillCardProps) {
   return (
-    <Card elevate size="$4" bordered {...props}>
-      <Card.Header padded>
-        <H3>Sony A7IV</H3>
-        <Paragraph theme="alt2">Now available</Paragraph>
+    <Card style={styles.cardContainer} elevate size="$4" bordered {...props}>
+      <Card.Header padded style={styles.cardHeader}>
+        <H3>{skill.name}</H3>
+        <Paragraph theme="alt2">{skill.description}</Paragraph>
       </Card.Header>
-      <Card.Footer padded>
-        <XStack flex={1} />
-        <Button borderRadius="$10">Purchase</Button>
-      </Card.Footer>
-      <Card.Background>
+
+      <Card.Background style={styles.cardImageContainer}>
         <Image
           resizeMode="contain"
-          alignSelf="center"
           source={{
-            width: 250,
-            height: 250,
-            uri: 'https://cdn.dribbble.com/userupload/5859589/file/original-55534b3895c5e6fee63696b7418eade7.png?resize=752x',
+            width: 80,
+            height: 80,
+            uri: skill.imageUri,
           }}
+          style={styles.cardImage}
         />
       </Card.Background>
+
+      <Card.Footer padded style={styles.cardFooter}>
+        <XStack alignItems="center" justifyContent="space-between" style={styles.footerContent}>
+          <Paragraph>Proficiency: {skill.proficiency}%</Paragraph>
+          <Progress size="small" value={skill.proficiency} />
+        </XStack>
+        <Button marginTop="$2" borderRadius="$10" size="$3" theme="blue">
+          Learn More
+        </Button>
+      </Card.Footer>
     </Card>
   );
 }
+
+const styles = StyleSheet.create({
+  cardContainer: {
+    borderRadius: 50, // Rounded corners
+    overflow: 'hidden', // Ensures rounded corners work for all content inside the card
+    alignItems: 'center', // Center content horizontally
+    justifyContent: 'center', // Center content vertically
+    textAlign: 'center', // Center text
+  },
+  cardHeader: {
+    alignItems: 'center', // Center header content
+    justifyContent: 'center', // Center header content
+  },
+  cardImageContainer: {
+    alignItems: 'center', // Center image container
+    justifyContent: 'center', // Center image container
+  },
+  cardImage: {
+    marginBottom: 8, // Space below the image
+  },
+  cardFooter: {
+    alignItems: 'center', // Center footer content
+    justifyContent: 'center', // Center footer content
+  },
+  footerContent: {
+    width: '100%', // Ensure footer content takes full width
+    justifyContent: 'space-between', // Space between proficiency text and progress bar
+  },
+});
