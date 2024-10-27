@@ -2,6 +2,7 @@ import { View, Text, Image, StyleSheet } from 'react-native';
 import React from 'react';
 import { useLocalSearchParams } from 'expo-router';
 import { XStack, YStack, Button, Anchor } from 'tamagui';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const DevHome = () => {
   const { dev } = useLocalSearchParams<{ dev: string }>();
@@ -69,10 +70,28 @@ const DevHome = () => {
           <Text>Email: developer@example.com</Text>
           <Text>Location: Abuja, Nigeria</Text>
 
-          {/* Tip Button */}
-          <Button theme="blue" size="$4" marginTop="$4" onPress={() => alert('Tipped!')}>
-            Tip
-          </Button>
+          {/* Action Buttons */}
+          <XStack space="$3" marginTop="$4" alignItems="center">
+            <Button onPress={() => alert('Liked!')} theme="red" size="$4" icon={<Icon name="heart" size={20} color="#fff" />}>
+              Like
+            </Button>
+            <Button onPress={() => alert('Followed!')} theme="green" size="$4" icon={<Icon name="user-plus" size={20} color="#fff" />}>
+              Follow
+            </Button>
+            <Anchor href="https://yourportfolio.com" target="_blank">
+              <Button theme="blue" size="$4" icon={<Icon name="link" size={20} color="#fff" />}>
+                Portfolio
+              </Button>
+            </Anchor>
+            <Anchor href="https://github.com/yourusername" target="_blank">
+              <Button theme="purple" size="$4" icon={<Icon name="github" size={20} color="#fff" />}>
+                GitHub
+              </Button>
+            </Anchor>
+            <Button theme="yellow" size="$4" onPress={() => alert('Tipped!')} icon={<Icon name="money" size={20} color="#fff" />}>
+              Tip
+            </Button>
+          </XStack>
         </YStack>
       </XStack>
     </View>
