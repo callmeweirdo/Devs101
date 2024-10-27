@@ -1,32 +1,24 @@
-import { View } from 'react-native'
-import React from 'react'
-import { Button, H2, H5, ScrollView, Text, YStack } from "tamagui";
-import { LoginSheet } from '../../components/loginsheet';
-import { DevsCards } from 'components/DevsCards';
+import { ScrollView, YStack, H2 } from 'tamagui';
+import React from 'react';
+import { CardDemo } from 'components/DevsCards'; // Import the CardDemo component
 
-const home = () => {
-  const [open, setOpen] = React.useState(false)
-
-    return (
+const Home = () => {
+  return (
     <>
-        <ScrollView
+      <ScrollView
         maxHeight="100%"
         width="100%"
         backgroundColor="$background"
         padding="$4"
-            borderRadius="$4"
-            // overflow="hidden" // Hide any scrollbars that might appear
-        >
-            <DevsCards />
-            <DevsCards />
-            <DevsCards />
-            <DevsCards />
-            <DevsCards />
-            <DevsCards />
-            <DevsCards />
-        </ScrollView>
+        borderRadius="$4"
+      >
+        <YStack space="$4" alignItems="center">
+          <H2 textAlign="center" color="$color">Developer Showcase</H2>
+          <CardDemo /> {/* Render the CardDemo component with cards */}
+        </YStack>
+      </ScrollView>
     </>
-    )
-}
+  );
+};
 
-export default home;
+export default Home;

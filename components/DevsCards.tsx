@@ -1,46 +1,31 @@
 import type { CardProps } from 'tamagui';
 import { Button, Card, H2, Image, Paragraph, XStack, YStack } from 'tamagui';
-import { Link, useRouter } from 'expo-router';
+import { Link } from 'expo-router';
 import React from 'react';
 
+// CardDemo Component
 export function CardDemo() {
-  const router = useRouter();
-  
   return (
-    <ResponsiveGrid>
-      {/* Multiple DevsCards can be added here */}
-      <DevsCards
-        animation="bouncy"
-        size="$5"
-        width={250}
-        height={300}
-        scale={0.9}
-        hoverStyle={{ scale: 0.925 }}
-        pressStyle={{ scale: 0.875 }}
-      />
-      <DevsCards
-        animation="bouncy"
-        size="$5"
-        width={250}
-        height={300}
-        scale={0.9}
-        hoverStyle={{ scale: 0.925 }}
-        pressStyle={{ scale: 0.875 }}
-      />
-      <DevsCards
-        animation="bouncy"
-        size="$5"
-        width={250}
-        height={300}
-        scale={0.9}
-        hoverStyle={{ scale: 0.925 }}
-        pressStyle={{ scale: 0.875 }}
-      />
-      {/* Add more cards as needed */}
-    </ResponsiveGrid>
+    <YStack space="$4" alignItems="center" paddingHorizontal="$4" paddingVertical="$6">
+
+      <ResponsiveGrid>
+        {/* Generate multiple DevsCards */}
+        {[...Array(6)].map((_, index) => (
+          <DevsCards
+            key={index}
+            animation="bouncy"
+            size="$4"
+            scale={0.9}
+            hoverStyle={{ scale: 0.925 }}
+            pressStyle={{ scale: 0.875 }}
+          />
+        ))}
+      </ResponsiveGrid>
+    </YStack>
   );
 }
 
+// DevsCards Component
 export function DevsCards(props: CardProps) {
   return (
     <Link href={{ pathname: "/(devs)/[dev]", params: { dev: "devvvvv" } }}>
@@ -68,7 +53,7 @@ export function DevsCards(props: CardProps) {
           />
         </Card.Background>
         <Card.Footer padded>
-          <XStack flex={1} justifyContent="center">
+          <XStack justifyContent="center">
             <Button borderRadius="$10">Purchase</Button>
           </XStack>
         </Card.Footer>
@@ -77,35 +62,34 @@ export function DevsCards(props: CardProps) {
   );
 }
 
-// Create a responsive grid system component
+// ResponsiveGrid Component
 export function ResponsiveGrid({ children }: { children: React.ReactNode }) {
   return (
-    <YStack
-      justifyContent="center"
-      flexWrap="wrap" // Makes items wrap in a row
-      paddingHorizontal="$4"
+    <XStack
+      justifyContent="space-between" // Distribute cards evenly
+      flexWrap="wrap" // Wrap cards to new rows
+      paddingHorizontal="$2" // Adjust padding for better spacing
       paddingVertical="$4"
       space="$4"
+      // Responsive widths for cards
+      $xl={{ width: '24%' }} // 4 cards per row for extra large screens
+      $lg={{ width: '24%' }}  // 4 cards per row for large screens
+      $md={{ width: '32%' }}  // 3 cards per row for medium screens
+      $sm={{ width: '48%' }}   // 2 cards per row for small screens
+      $xs={{ width: '100%' }}   // 1 card per row for extra small screens
     >
-      <XStack
-        justifyContent="center"
-        flexWrap="wrap" // Makes items wrap in a row
-        space="$4"
-        $xl={{ width: '33.33%' }}  // 3 cards per row
-        $lg={{ width: '50%' }}     // 2 cards per row on medium screens
-        $md={{ width: '50%' }}     // 2 cards per row
-        $sm={{ width: '100%' }}     // 1 card per row on small/mobile screens
-      >
-        {children}
-      </XStack>
-    </YStack>
+      {children}
+    </XStack>
   );
 }
 
+// Styles for cards
 const styles = {
   cardContainer: {
-    margin: '5px',
+    margin: '10px', // Space between cards
     borderRadius: 15, // Rounded corners for cards
+    overflow: 'hidden', // Rounded corners for all content inside the card
+    width: '100%', // Default width for cards
   },
   cardImage: {
     marginBottom: 8, // Space below the image
