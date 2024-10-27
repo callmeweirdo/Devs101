@@ -103,7 +103,7 @@ export default DevHome;
 // Custom Styles
 const styles = StyleSheet.create({
   container: {
-    height: '60%',
+    // height: '60%',
     paddingHorizontal: 16,
     paddingVertical: 16,
     justifyContent: 'center',  // Center all content vertically
