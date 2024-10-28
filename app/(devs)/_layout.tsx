@@ -1,9 +1,9 @@
-import { Link, Stack } from 'expo-router'
-import { Button, useTheme } from 'tamagui'
-import { Atom, AudioWaveform } from '@tamagui/lucide-icons'
+import { Link, Stack } from 'expo-router';
+import { Button, useTheme } from 'tamagui';
+import CustomHeader from 'components/CustomHeader';
 
 export default function TabLayout() {
-  const theme = useTheme()
+  const theme = useTheme();
 
   return (
     <Stack>
@@ -18,14 +18,15 @@ export default function TabLayout() {
               </Button>
             </Link>
           ),
-          headerShown: false
+          headerShown: true,
         }}
       />
-      
+
       <Stack.Screen
         name="[dev]"
         options={{
-          title: "Developer"
+          title: 'Developer Profile',
+          headerRight: () => <CustomHeader />, // Place CustomHeader in headerRight
         }}
       />
     </Stack>
