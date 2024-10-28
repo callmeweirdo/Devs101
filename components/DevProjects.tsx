@@ -34,6 +34,26 @@ const projects: Project[] = [
     description: 'Real-time chat application built with React and Firebase.',
     imageUri: 'https://via.placeholder.com/150',
     link: 'https://chatapp.com',
+  },{
+    name: 'Chat Application',
+    description: 'Real-time chat application built with React and Firebase.',
+    imageUri: 'https://via.placeholder.com/150',
+    link: 'https://chatapp.com',
+  },{
+    name: 'Chat Application',
+    description: 'Real-time chat application built with React and Firebase.',
+    imageUri: 'https://via.placeholder.com/150',
+    link: 'https://chatapp.com',
+  },{
+    name: 'Chat Application',
+    description: 'Real-time chat application built with React and Firebase.',
+    imageUri: 'https://via.placeholder.com/150',
+    link: 'https://chatapp.com',
+  },{
+    name: 'Chat Application',
+    description: 'Real-time chat application built with React and Firebase.',
+    imageUri: 'https://via.placeholder.com/150',
+    link: 'https://chatapp.com',
   },
 ];
 

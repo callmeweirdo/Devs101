@@ -16,6 +16,7 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "@clerk/clerk-expo": "^2.2.29",
     "@react-navigation/native": "^6.1.17",
     "@tamagui/config": "^1.115.4",
     "@tamagui/lucide-icons": "^1.115.4",

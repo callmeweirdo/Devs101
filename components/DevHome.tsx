@@ -1,11 +1,13 @@
-import { View, Text, Image, StyleSheet } from 'react-native';
 import React from 'react';
+import { View, Text, Image, StyleSheet } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { XStack, YStack, Button, Anchor } from 'tamagui';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { useUser } from '@clerk/clerk-expo';
 
 const DevHome = () => {
   const { dev } = useLocalSearchParams<{ dev: string }>();
+  const { user } = useUser();
 
   return (
     <View style={styles.container}>
@@ -14,10 +16,10 @@ const DevHome = () => {
         gap="$4"
         justifyContent="center"
         alignItems="center"
-        $gtSm={{ flexDirection: 'row' }}  // Row for larger screens
-        $sm={{ flexDirection: 'column' }} // Column for smaller screens
+        $gtSm={{ flexDirection: 'row' }}
+        $sm={{ flexDirection: 'column' }}
       >
-        {/* Right Column (Profile Image and Social Links, 40% on large screens) */}
+        {/* Right Column (Profile Image and Social Links) */}
         <YStack
           flex={0.4}
           style={styles.rightColumn}
@@ -25,7 +27,7 @@ const DevHome = () => {
           padding="$4"
           alignItems="center"
           justifyContent="center"
-          $sm={{ flex: 1 }}  // Full width on small screens
+          $sm={{ flex: 1 }}
         >
           {/* Profile Image */}
           <Image
@@ -34,7 +36,7 @@ const DevHome = () => {
           />
 
           {/* Full Name */}
-          <Text style={styles.fullName}>Developer Name</Text>
+          <Text style={styles.fullName}>{user?.fullName || 'Developer Name'}</Text>
 
           {/* Social Media Links */}
           <Text style={styles.subheading}>Find me on</Text>
@@ -51,14 +53,14 @@ const DevHome = () => {
           </XStack>
         </YStack>
 
-        {/* Left Column (Description and Contact Info, 60% on large screens) */}
+        {/* Left Column (Description and Contact Info) */}
         <YStack
           flex={0.6}
           style={styles.leftColumn}
           bg="rgba(255, 255, 255, 0.8)"
           padding="$4"
           justifyContent="center"
-          $sm={{ flex: 1 }}  // Full width on small screens
+          $sm={{ flex: 1 }}
         >
           <Text style={styles.title}>Hi, I'm {dev}</Text>
           <Text style={styles.description}>
@@ -67,7 +69,7 @@ const DevHome = () => {
           </Text>
 
           <Text style={styles.subheading}>Contact Me</Text>
-          <Text>Email: developer@example.com</Text>
+          <Text>Email: {user?.emailAddresses[0].emailAddress || 'developer@example.com'}</Text>
           <Text>Location: Abuja, Nigeria</Text>
 
           {/* Action Buttons */}
@@ -103,10 +105,9 @@ export default DevHome;
 // Custom Styles
 const styles = StyleSheet.create({
   container: {
-    // height: '60%',
     paddingHorizontal: 16,
     paddingVertical: 16,
-    justifyContent: 'center',  // Center all content vertically
+    justifyContent: 'center',
   },
   leftColumn: {
     borderRadius: 10,
@@ -143,7 +144,7 @@ const styles = StyleSheet.create({
   profileImage: {
     width: 200,
     height: 200,
-    borderRadius: 100, // Rounded image
+    borderRadius: 100,
     overflow: 'hidden',
     marginBottom: 16,
   },

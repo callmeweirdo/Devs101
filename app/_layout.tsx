@@ -1,23 +1,27 @@
-import '../tamagui-web.css'
+import '../tamagui-web.css';
+import { useEffect } from 'react';
+import { StatusBar, useColorScheme } from 'react-native';
+import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { useFonts } from 'expo-font';
+import { Link, SplashScreen, Stack, Tabs } from 'expo-router';
+import { ClerkProvider, ClerkLoaded } from '@clerk/clerk-expo';
+import { Button, useTheme } from 'tamagui';
+import { Atom, AudioWaveform, Home } from '@tamagui/lucide-icons';
+import { Provider } from './Provider';
 
-import { useEffect } from 'react'
-import { StatusBar, useColorScheme } from 'react-native'
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'
-import { useFonts } from 'expo-font'
-import { Link, SplashScreen, Stack, Tabs } from 'expo-router'
-import { Provider } from './Provider'
-import { Button, useTheme } from 'tamagui'
-import { Atom, AudioWaveform, Home } from '@tamagui/lucide-icons'
+const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
 
 export {
-  // Catch any errors thrown by the Layout component.
   ErrorBoundary,
-} from 'expo-router'
+} from 'expo-router';
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync()
+SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  if (!publishableKey) {
+    throw new Error('Missing Publishable Key. Please set EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY in your .env');
+  }
+
   const [interLoaded, interError] = useFonts({
     Inter: require('@tamagui/font-inter/otf/Inter-Medium.otf'),
     InterBold: require('@tamagui/font-inter/otf/Inter-Bold.otf'),
@@ -25,25 +29,32 @@ export default function RootLayout() {
 
   useEffect(() => {
     if (interLoaded || interError) {
-      // Hide the splash screen after the fonts have loaded (or an error was returned) and the UI is ready.
-      SplashScreen.hideAsync()
+      SplashScreen.hideAsync();
     }
-  }, [interLoaded, interError])
+  }, [interLoaded, interError]);
 
   if (!interLoaded && !interError) {
-    return null
+    return null;
   }
 
   return (
-    <Providers>
-      <RootLayoutNav />
-    </Providers>
-  )
+    <ClerkProvider publishableKey={publishableKey}>
+      <ClerkLoaded>
+        <Providers>
+          <RootLayoutNav />
+        </Providers>
+      </ClerkLoaded>
+    </ClerkProvider>
+  );
 }
 
-const Providers = ({ children }: { children: React.ReactNode }) => {
-  return <Provider>{children}</Provider>
-}
+const Providers = ({ children }) => {
+  return (
+    <Provider>
+      {children}
+    </Provider>
+  );
+};
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
@@ -52,7 +63,6 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <StatusBar barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'} />
-
       <Tabs
         screenOptions={{
           tabBarActiveTintColor: theme.red10.val,
@@ -67,7 +77,6 @@ function RootLayoutNav() {
           headerTintColor: theme.color.val,
         }}
       >
-        {/* First Tab: Home */}
         <Tabs.Screen
           name="index"
           options={{
@@ -82,16 +91,14 @@ function RootLayoutNav() {
             ),
           }}
         />
-        
-        {/* Second Tab: Devs (Customizing this one) */}
         <Tabs.Screen
           name="(devs)"
           options={{
-            title: 'Explore Devs', // Custom Title
-            tabBarIcon: ({ color }) => <Atom color={color} />, // Custom Icon (Atom from Lucide icons)
-            tabBarLabel: 'Devs', // Label for the tab
-            headerShown: false, // Show header for this tab
-            headerTitle: 'Developers Hub', // Custom header title
+            title: 'Explore Devs',
+            tabBarIcon: ({ color }) => <Atom color={color} />,
+            tabBarLabel: 'Devs',
+            headerShown: false,
+            headerTitle: 'Developers Hub',
             headerRight: () => (
               <Link href="/" asChild>
                 <Button mr="$4" bg="$blue8" color="$blue12">
@@ -103,5 +110,5 @@ function RootLayoutNav() {
         />
       </Tabs>
     </ThemeProvider>
-  )
+  );
 }
