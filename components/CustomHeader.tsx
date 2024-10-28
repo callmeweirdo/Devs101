@@ -8,22 +8,29 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 const CustomHeader = () => {
   const { user } = useUser();
-  const { signOut } = useAuth();
+  const { signOut, signIn } = useAuth();
   const netInfo = useNetInfo();
+  const isLoggedIn = !!user;
 
-  const handleLogout = async () => {
-    try {
-      await signOut();
-      alert('Logged out successfully');
-    } catch (error) {
-      console.error('Logout error:', error);
+  const handleAuthAction = async () => {
+    if (isLoggedIn) {
+      // Logout action
+      try {
+        await signOut();
+        alert('Logged out successfully');
+      } catch (error) {
+        console.error('Logout error:', error);
+      }
+    } else {
+      // Redirect to login
+      signIn(); // This will open the login screen.
     }
   };
 
   return (
-    <XStack alignItems="center" space="$3">
+    <XStack alignItems="center" paddingHorizontal="$3" space="$3">
       {/* Avatar and user details */}
-      <Avatar size="$4">
+      <Avatar size="$4" marginRight="$2">
         <Avatar.Image src={user?.profileImageUrl} />
         <Avatar.Fallback>
           {user?.firstName?.charAt(0)}
@@ -38,15 +45,15 @@ const CustomHeader = () => {
         </Text>
       </YStack>
 
-      {/* Logout Button */}
+      {/* Login/Logout Button */}
       <Button
         size="$3"
-        theme="red"
-        marginLeft="$3"
-        onPress={handleLogout}
-        icon={<Icon name="sign-out" size={16} color="#fff" />}
+        theme={isLoggedIn ? 'red' : 'blue'}
+        marginRight="$3"
+        onPress={handleAuthAction}
+        icon={<Icon name={isLoggedIn ? 'sign-out' : 'sign-in'} size={16} color="#fff" />}
       >
-        Logout
+        {isLoggedIn ? 'Logout' : 'Login'}
       </Button>
     </XStack>
   );

@@ -1,7 +1,7 @@
 import React from 'react'
 import type { TabsContentProps } from 'tamagui'
 import { Button, H5, Separator, SizableText, Tabs, XStack, YStack, isWeb } from 'tamagui'
-import { SignInWithGoogleButton } from './AuthButtons'
+import { SignInWithGitHubButton, SignInWithGoogleButton, SignInWithLinkedInButton } from './AuthButtons'
 
 const demos = ['horizontal', 'vertical'] as const
 const demosTitle: Record<(typeof demos)[number], string> = {
@@ -39,10 +39,8 @@ const LoginTab = () => {
       <TabsContent value="tab1">
         <YStack padding="$3" gap="$3" >
           <SignInWithGoogleButton buttonStyle={{ size: "$5", width: "250px" }} />
-          <Button size="$5" width="250px" >Sign In with Github</Button>
-          <Button size="$5" width="250px" >Sign In with LinkdIn</Button>
-          <Button size="$5" width="250px" >Sign In with X</Button>
-          <Button size="$5" width="250px" >Connect Wallet</Button>
+          <SignInWithGitHubButton buttonStyle={{ size: "$5", width: "250px" }} />
+          <SignInWithLinkedInButton buttonStyle={{ size: "$5", width: "250px" }} />
         </YStack>
       </TabsContent>
 
@@ -51,8 +49,6 @@ const LoginTab = () => {
           <Button size="$5" width="250px" >Sign Up with Google</Button>
           <Button size="$5" width="250px" >Sign Up with Github</Button>
           <Button size="$5" width="250px" >Sign Up with LinkdIn</Button>
-          <Button size="$5" width="250px" >Sign Up with X</Button>
-          <Button size="$5" width="250px" >Connect Wallet</Button>
         </YStack>
       </TabsContent>
 
