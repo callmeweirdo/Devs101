@@ -7,7 +7,10 @@ export default function TabLayout() {
 
   return (
     <Stack screenOptions={{ 
-      headerShown: false
+      headerShown: false,
+      headerRight: () => (
+            <CustomHeader />
+          ),
      }} />
   );
 }

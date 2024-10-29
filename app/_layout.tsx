@@ -84,12 +84,8 @@ function RootLayoutNav() {
             title: 'Devs',
             tabBarIcon: ({ color }) => <Home color={color} />,
             headerRight: () => (
-              <Link href="/" asChild>
-                <Button mr="$4" bg="$purple8" color="$purple12">
-                  Join Now
-                </Button>
-              </Link>
-            ),
+            <CustomHeader />
+          ),
           }}
         />
         <Tabs.Screen
@@ -101,12 +97,8 @@ function RootLayoutNav() {
             headerShown: true,
             headerTitle: 'Developers Hub',
             headerRight: () => (
-              <Link href="/" asChild>
-                <Button mr="$4" bg="$blue8" color="$blue12">
-                  Settings
-                </Button>
-              </Link>
-            ),
+            <CustomHeader />
+          ),
           }}
         />
         <Tabs.Screen
@@ -121,7 +113,6 @@ function RootLayoutNav() {
               <CustomHeader />
             ),
             tabBarButton: () => null,  // Hide this tab from the tab bar
-
           }}
         />
       </Tabs>

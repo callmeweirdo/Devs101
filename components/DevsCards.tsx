@@ -5,14 +5,24 @@ import React from 'react';
 
 // CardDemo Component
 export function CardDemo() {
+  const devsData = [
+    { title: 'Dev101', description: 'Now available', imageUri: 'https://image.pngaaa.com/743/6496743-middle.png' },
+    { title: 'Dev102', description: 'Available soon', imageUri: 'https://image.pngaaa.com/743/6496743-middle.png' },
+    { title: 'Dev103', description: 'Limited slots', imageUri: 'https://image.pngaaa.com/743/6496743-middle.png' },
+    { title: 'Dev104', description: 'Now available', imageUri: 'https://image.pngaaa.com/743/6496743-middle.png' },
+    { title: 'Dev105', description: 'Coming soon', imageUri: 'https://image.pngaaa.com/743/6496743-middle.png' },
+    { title: 'Dev106', description: 'Now available', imageUri: 'https://image.pngaaa.com/743/6496743-middle.png' },
+  ];
+
   return (
     <YStack space="$4" alignItems="center" paddingHorizontal="$4" paddingVertical="$6">
-
       <ResponsiveGrid>
-        {/* Generate multiple DevsCards */}
-        {[...Array(6)].map((_, index) => (
+        {devsData.map((dev, index) => (
           <DevsCards
             key={index}
+            title={dev.title}
+            description={dev.description}
+            imageUri={dev.imageUri}
             animation="bouncy"
             size="$4"
             scale={0.9}
@@ -26,9 +36,9 @@ export function CardDemo() {
 }
 
 // DevsCards Component
-export function DevsCards(props: CardProps) {
+export function DevsCards({ title, description, imageUri, ...props }: CardProps & { title: string; description: string; imageUri: string }) {
   return (
-    <Link href={{ pathname: "/[dev]/", params: { dev: "dev101" } }}>
+    <Link href={{ pathname: "/[dev]/", params: { dev: title.toLowerCase() } }}>
       <Card
         elevate
         size="$4"
@@ -37,8 +47,8 @@ export function DevsCards(props: CardProps) {
         style={styles.cardContainer}
       >
         <Card.Header padded>
-          <H2 textAlign="center">Dev101</H2>
-          <Paragraph theme="alt2" textAlign="center">Now available</Paragraph>
+          <H2 textAlign="center">{title}</H2>
+          <Paragraph theme="alt2" textAlign="center">{description}</Paragraph>
         </Card.Header>
         <Card.Background>
           <Image
@@ -47,7 +57,7 @@ export function DevsCards(props: CardProps) {
             source={{
               width: 300,
               height: 300,
-              uri: 'https://image.pngaaa.com/743/6496743-middle.png',
+              uri: imageUri,
             }}
             style={styles.cardImage}
           />
@@ -66,16 +76,16 @@ export function DevsCards(props: CardProps) {
 export function ResponsiveGrid({ children }: { children: React.ReactNode }) {
   return (
     <XStack
-      justifyContent="space-between" // Distribute cards evenly
-      flexWrap="wrap" // Wrap cards to new rows
-      paddingHorizontal="$2" // Adjust padding for better spacing
+      justifyContent="space-between"
+      flexWrap="wrap"
+      paddingHorizontal="$2"
       paddingVertical="$4"
       space="$4"
-      // Responsive widths for cards
-      $xl={{ width: '24%' }} // 4 cards per row for extra large screens
-      $lg={{ width: '24%' }}  // 4 cards per row for large screens
-      $md={{ width: '32%' }}  // 3 cards per row for medium screens
-      $sm={{ width: '48%' }}   // 2 cards per row for small screens
+      // Responsive widths for each card
+      $gtLg={{ width: '32%' }}  // 4 cards per row for extra large screens
+      $lg={{ width: '32%' }}    // 4 cards per row for large screens
+      $md={{ width: '32%' }}    // 3 cards per row for medium screens
+      $sm={{ width: '48%' }}    // 2 cards per row for small screens
       $xs={{ width: '100%' }}   // 1 card per row for extra small screens
     >
       {children}

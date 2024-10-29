@@ -7,16 +7,16 @@ const Home = () => {
     <>
       <ScrollView
         maxHeight="100%"
-        width="100%"
+        // width="100%"
         backgroundColor="$background"
         padding="$4"
         borderRadius="$4"
-      >
-        <YStack space="$4" alignItems="center">
+      > 
+         <YStack space="$4" alignItems="center">
           <H2 textAlign="center" color="$color">Developer Showcase</H2>
           <CardDemo /> {/* Render the CardDemo component with cards */}
-        </YStack>
-      </ScrollView>
+    </YStack> 
+         </ScrollView >
     </>
   );
 };
