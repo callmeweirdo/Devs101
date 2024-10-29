@@ -6,8 +6,9 @@ import { useFonts } from 'expo-font';
 import { Link, SplashScreen, Stack, Tabs } from 'expo-router';
 import { ClerkProvider, ClerkLoaded } from '@clerk/clerk-expo';
 import { Button, useTheme } from 'tamagui';
-import { Atom, AudioWaveform, Home } from '@tamagui/lucide-icons';
+import { Atom, AudioWaveform, Briefcase, Home } from '@tamagui/lucide-icons';
 import { Provider } from './Provider';
+import CustomHeader from 'components/CustomHeader';
 
 const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
 
@@ -97,7 +98,7 @@ function RootLayoutNav() {
             title: 'Explore Devs',
             tabBarIcon: ({ color }) => <Atom color={color} />,
             tabBarLabel: 'Devs',
-            headerShown: false,
+            headerShown: true,
             headerTitle: 'Developers Hub',
             headerRight: () => (
               <Link href="/" asChild>
@@ -106,6 +107,21 @@ function RootLayoutNav() {
                 </Button>
               </Link>
             ),
+          }}
+        />
+        <Tabs.Screen
+          name="[dev]"
+          options={{
+            title: 'Dev Profile',
+            tabBarIcon: ({ color }) => <Briefcase color={color} />,
+            tabBarLabel: 'Dev',
+            headerShown: false,
+            // headerTitle: 'Developers Hub',
+            headerRight: () => (
+              <CustomHeader />
+            ),
+            tabBarButton: () => null,  // Hide this tab from the tab bar
+
           }}
         />
       </Tabs>

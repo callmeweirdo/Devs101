@@ -28,7 +28,7 @@ export function CardDemo() {
 // DevsCards Component
 export function DevsCards(props: CardProps) {
   return (
-    <Link href={{ pathname: "/(devs)/[dev]", params: { dev: "devvvvv" } }}>
+    <Link href={{ pathname: "/[dev]/", params: { dev: "dev101" } }}>
       <Card
         elevate
         size="$4"
