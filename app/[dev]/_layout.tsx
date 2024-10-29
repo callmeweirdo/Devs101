@@ -37,9 +37,8 @@ export default function TabLayout() {
          }}
       />
         <Stack.Screen
-        name='/(devs)/[dev]/profile/'
-        options={{ 
-            // headerTitle: 'Developers Profile',
+        name='/[dev]/settings/'
+        options={{
           title: "Developers Profile",
           headerRight: () => (
               <CustomHeader />
