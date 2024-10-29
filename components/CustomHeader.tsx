@@ -5,8 +5,12 @@ import { Avatar, XStack, YStack, Button } from 'tamagui';
 import { useUser, useAuth } from '@clerk/clerk-expo';
 import { useNetInfo } from '@react-native-community/netinfo';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { toggleStore } from 'stores/toggleStore';
+import { LoginSheet } from './loginsheet';
 
 const CustomHeader = () => {
+  const {login, toggleLogin} = toggleStore((state) => state);
+
   const { user } = useUser();
   const { signOut, signIn } = useAuth();
   const netInfo = useNetInfo();
@@ -23,7 +27,8 @@ const CustomHeader = () => {
       }
     } else {
       // Redirect to login
-      signIn(); // This will open the login screen.
+      // signIn(); // This will open the login screen.
+      toggleLogin()
     }
   };
 
@@ -55,6 +60,7 @@ const CustomHeader = () => {
       >
         {isLoggedIn ? 'Logout' : 'Login'}
       </Button>
+      {/* <LoginSheet open={login} setOpen={toggleLogin} /> */}
     </XStack>
   );
 };

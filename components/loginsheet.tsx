@@ -5,12 +5,15 @@ import { Sheet, useSheet } from '@tamagui/sheet';
 
 import { Button, H1, H2, Input, Paragraph, Text, XStack, YStack } from 'tamagui'
 import LoginTab from './loginTab';
+import { toggleStore } from 'stores/toggleStore';
 
 const spModes = ['percent', 'constant', 'fit', 'mixed'] as const
 
 export const LoginSheet = ({open, setOpen}) => {
   const [position, setPosition] = React.useState(0)
-//   const [open, setOpen] = React.useState(false)
+  //   const [open, setOpen] = React.useState(false)
+  const {login, toggleLogin} = toggleStore((state) => state);
+  
   const [modal, setModal] = React.useState(true)
   const [innerOpen, setInnerOpen] = React.useState(false)
   const [snapPointsMode, setSnapPointsMode] =
@@ -36,10 +39,10 @@ export const LoginSheet = ({open, setOpen}) => {
       
 
       <Sheet
-        forceRemoveScrollEnabled={open}
+        forceRemoveScrollEnabled={login}
         modal={modal}
-        open={open}
-        onOpenChange={setOpen}
+        open={login}
+        onOpenChange={toggleLogin}
         snapPoints={snapPoints}
         snapPointsMode={snapPointsMode}
         dismissOnSnapToBottom
@@ -54,7 +57,7 @@ export const LoginSheet = ({open, setOpen}) => {
           exitStyle={{ opacity: 0 }}
         />
 
-          <Button size="$6" circular icon={ChevronDown} onPress={() => setOpen(false)} />
+          <Button size="$6" circular icon={ChevronDown} onPress={toggleLogin} />
         <Sheet.Handle />
         <Sheet.Frame padding="$4" justifyContent="center" alignItems="center" space="$5">
           <LoginTab />
