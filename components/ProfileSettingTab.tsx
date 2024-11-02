@@ -1,36 +1,33 @@
-import React, { useEffect } from 'react';
-import { useUserProfileStore } from 'stores/userProfileStore'; // Adjust import paths
+import React, { useCallback } from 'react';
+import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
+import { useUserProfileStore } from 'stores/userProfileStore';
 import { useSkillsStore } from 'stores/skillsStore';
 import { useProjectsStore } from 'stores/projectsStore';
 import { useContactStore } from 'stores/contactStore';
-import { useQuery } from '@tanstack/react-query';
-import {
-  Button,
-  SizableText,
-  Separator,
-  Tabs,
-  YStack,
-} from 'tamagui';
+import { Button, SizableText, Separator, Tabs, YStack } from 'tamagui';
+import { clerkClient } from '@clerk/clerk-react';
+import { useLocalSearchParams } from 'expo-router';
 
-const fetchUserMetadata = async (userId) => {
+const fetchUserMetadata = async (userId: string) => {
   const user = await clerkClient.users.getUser(userId);
   return user;
 };
 
-const ProfileSettingTab = () => {
-  const userId = 'YOUR_CLI_USER_ID'; // Replace with your logic to get the user's ID
-
+const ProfileSettingTab: React.FC = () => {
+  const { userId } = useLocalSearchParams<{ dev: string }>();
   const { fetchUserProfile, setUserProfile } = useUserProfileStore();
   const { fetchSkills, setSkills } = useSkillsStore();
   const { fetchProjects, setProjects } = useProjectsStore();
   const { fetchContactInfo, setContactInfo } = useContactStore();
 
-  useEffect(() => {
-    fetchUserProfile(userId);
-    fetchSkills(userId);
-    fetchProjects(userId);
-    fetchContactInfo(userId);
-  }, [userId]);
+  useIsomorphicLayoutEffect(() => {
+    if (userId) {
+      fetchUserProfile(userId);
+      fetchSkills(userId);
+      fetchProjects(userId);
+      fetchContactInfo(userId);
+    }
+  }, [userId, fetchUserProfile, fetchSkills, fetchProjects, fetchContactInfo]);
 
   return (
     <YStack alignItems="center" justifyContent="center" padding="$4" flex={1}>
@@ -48,26 +45,16 @@ const ProfileSettingTab = () => {
       >
         <Tabs.List
           separator={<Separator vertical />}
-          disablePassBorderRadius="bottom"
           aria-label="Edit your profile"
           justifyContent="center"
         >
-          <Tabs.Tab flex={1} value="profile">
-            <SizableText fontFamily="$body">Profile</SizableText>
-          </Tabs.Tab>
-          <Tabs.Tab flex={1} value="skills">
-            <SizableText fontFamily="$body">Skills</SizableText>
-          </Tabs.Tab>
-          <Tabs.Tab flex={1} value="projects">
-            <SizableText fontFamily="$body">Projects</SizableText>
-          </Tabs.Tab>
-          <Tabs.Tab flex={1} value="contact">
-            <SizableText fontFamily="$body">Contact</SizableText>
-          </Tabs.Tab>
+          {['profile', 'skills', 'projects', 'contact'].map((tab) => (
+            <Tabs.Tab key={tab} flex={1} value={tab}>
+              <SizableText fontFamily="$body">{tab.charAt(0).toUpperCase() + tab.slice(1)}</SizableText>
+            </Tabs.Tab>
+          ))}
         </Tabs.List>
         <Separator />
-
-        
 
         <Tabs.Content value="profile">
           <ProfileEditForm />
@@ -90,137 +77,161 @@ const ProfileSettingTab = () => {
 };
 
 // Profile Edit Form
-const ProfileEditForm = () => {
+const ProfileEditForm: React.FC = () => {
   const { userProfile, updateUserProfile } = useUserProfileStore();
-  
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const newProfile = {
-      name: e.target.name.value,
-      location: e.target.location.value,
-      bio: e.target.bio.value,
-      profilePhotoUrl: e.target.profilePhotoUrl.value,
-    };
-    updateUserProfile(userProfile.id, newProfile); // Assuming userProfile has an id
-  };
+
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const newProfile = {
+        name: formData.get('name') as string,
+        location: formData.get('location') as string,
+        bio: formData.get('bio') as string,
+        profilePhotoUrl: formData.get('profilePhotoUrl') as string,
+      };
+      updateUserProfile(userProfile.id, newProfile);
+    },
+    [userProfile.id, updateUserProfile]
+  );
 
   return (
     <YStack padding="$3" gap="$3" width="100%">
       <SizableText fontSize="$5">Edit Profile Information</SizableText>
       <form onSubmit={handleSubmit}>
-        <YStack>
-          <SizableText>Name</SizableText>
-          <input type="text" name="name" defaultValue={userProfile?.name || ''} placeholder="Enter your name" style={{ padding: 8, width: '100%' }} />
-        </YStack>
-        <YStack>
-          <SizableText>Location</SizableText>
-          <input type="text" name="location" defaultValue={userProfile?.location || ''} placeholder="Enter your location" style={{ padding: 8, width: '100%' }} />
-        </YStack>
-        <YStack>
-          <SizableText>Bio</SizableText>
-          <textarea name="bio" defaultValue={userProfile?.privateMetadata?.bio || ''} placeholder="A short bio about yourself" style={{ padding: 8, width: '100%', height: 80 }} />
-        </YStack>
-        <YStack>
-          <SizableText>Profile Photo URL</SizableText>
-          <input type="url" name="profilePhotoUrl" defaultValue={userProfile?.privateMetadata?.profilePhotoUrl || ''} placeholder="Link to your profile photo" style={{ padding: 8, width: '100%' }} />
-        </YStack>
-        <Button width="100%" type="submit">Save Profile</Button>
+        {['name', 'location', 'bio', 'profilePhotoUrl'].map((field) => (
+          <YStack key={field}>
+            <SizableText>{field.charAt(0).toUpperCase() + field.slice(1)}</SizableText>
+            <input
+              type={field === 'profilePhotoUrl' ? 'url' : 'text'}
+              name={field}
+              defaultValue={userProfile?.[field] || ''}
+              placeholder={`Enter your ${field}`}
+              style={{ padding: 8, width: '100%' }}
+            />
+          </YStack>
+        ))}
+        <Button width="100%" type="submit">
+          Save Profile
+        </Button>
       </form>
     </YStack>
   );
 };
 
 // Skills Edit Form
-const SkillsEditForm = () => {
+const SkillsEditForm: React.FC = () => {
   const { skills, updateSkills } = useSkillsStore();
-  
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const skill = e.target.skill.value;
-    const proficiency = e.target.proficiency.value;
-    const updatedSkills = [...skills, { skill, proficiency }];
-    updateSkills(userProfile.id, updatedSkills); // Assuming you pass the user id
-  };
+
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const skill = formData.get('skill') as string;
+      const proficiency = formData.get('proficiency') as string;
+      updateSkills([...skills, { skill, proficiency }]);
+    },
+    [skills, updateSkills]
+  );
 
   return (
     <YStack padding="$3" gap="$3" width="100%">
       <SizableText fontSize="$5">Edit Skills</SizableText>
       <form onSubmit={handleSubmit}>
-        <YStack>
-          <SizableText>Skill Name</SizableText>
-          <input type="text" name="skill" placeholder="Enter skill" style={{ padding: 8, width: '100%' }} />
-        </YStack>
-        <YStack>
-          <SizableText>Proficiency Level</SizableText>
-          <input type="text" name="proficiency" placeholder="Beginner/Intermediate/Expert" style={{ padding: 8, width: '100%' }} />
-        </YStack>
-        <Button width="100%" type="submit">Add Skill</Button>
+        {['skill', 'proficiency'].map((field) => (
+          <YStack key={field}>
+            <SizableText>{field.charAt(0).toUpperCase() + field.slice(1)}</SizableText>
+            <input
+              type="text"
+              name={field}
+              placeholder={`Enter ${field}`}
+              style={{ padding: 8, width: '100%' }}
+            />
+          </YStack>
+        ))}
+        <Button width="100%" type="submit">
+          Add Skill
+        </Button>
       </form>
     </YStack>
   );
 };
 
 // Projects Edit Form
-const ProjectsEditForm = () => {
+const ProjectsEditForm: React.FC = () => {
   const { projects, updateProjects } = useProjectsStore();
-  
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const projectName = e.target.projectName.value;
-    const projectLink = e.target.projectLink.value;
-    const updatedProjects = [...projects, { name: projectName, link: projectLink }];
-    updateProjects(userProfile.id, updatedProjects); // Assuming you pass the user id
-  };
+
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const name = formData.get('projectName') as string;
+      const link = formData.get('projectLink') as string;
+      updateProjects([...projects, { name, link }]);
+    },
+    [projects, updateProjects]
+  );
 
   return (
     <YStack padding="$3" gap="$3" width="100%">
       <SizableText fontSize="$5">Edit Projects</SizableText>
       <form onSubmit={handleSubmit}>
-        <YStack>
-          <SizableText>Project Name</SizableText>
-          <input type="text" name="projectName" placeholder="Enter project name" style={{ padding: 8, width: '100%' }} />
-        </YStack>
-        <YStack>
-          <SizableText>Project Link</SizableText>
-          <input type="url" name="projectLink" placeholder="Link to your project" style={{ padding: 8, width: '100%' }} />
-        </YStack>
-        <Button width="100%" type="submit">Add Project</Button>
+        {['projectName', 'projectLink'].map((field) => (
+          <YStack key={field}>
+            <SizableText>{field.replace('project', '').trim()}</SizableText>
+            <input
+              type={field === 'projectLink' ? 'url' : 'text'}
+              name={field}
+              placeholder={`Enter ${field}`}
+              style={{ padding: 8, width: '100%' }}
+            />
+          </YStack>
+        ))}
+        <Button width="100%" type="submit">
+          Add Project
+        </Button>
       </form>
     </YStack>
   );
 };
 
 // Contact Edit Form
-const ContactEditForm = () => {
+const ContactEditForm: React.FC = () => {
   const { contactInfo, updateContactInfo } = useContactStore();
-  
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const newContactInfo = {
-      twitter: e.target.twitter.value,
-      linkedIn: e.target.linkedIn.value,
-      email: e.target.email.value,
-    };
-    updateContactInfo(userProfile.id, newContactInfo); // Assuming you pass the user id
-  };
+
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const newContactInfo = {
+        twitter: formData.get('twitter') as string,
+        linkedIn: formData.get('linkedIn') as string,
+        email: formData.get('email') as string,
+      };
+      updateContactInfo(newContactInfo);
+    },
+    [updateContactInfo]
+  );
 
   return (
     <YStack padding="$3" gap="$3" width="100%">
       <SizableText fontSize="$5">Edit Contact Information</SizableText>
       <form onSubmit={handleSubmit}>
-        <YStack>
-          <SizableText>Twitter</SizableText>
-          <input type="url" name="twitter" defaultValue={contactInfo.twitter || ''} placeholder="Your Twitter profile link" style={{ padding: 8, width: '100%' }} />
-        </YStack>
-        <YStack>
-          <SizableText>LinkedIn</SizableText>
-          <input type="url" name="linkedIn" defaultValue={contactInfo.linkedIn || ''} placeholder="Your LinkedIn profile link" style={{ padding: 8, width: '100%' }} />
-        </YStack>
-        <YStack>
-          <SizableText>Email</SizableText>
-          <input type="email" name="email" defaultValue={contactInfo.email || ''} placeholder="Your email address" style={{ padding: 8, width: '100%' }} />
-        </YStack>
-        <Button width="100%" type="submit">Save Contact Info</Button>
+        {['twitter', 'linkedIn', 'email'].map((field) => (
+          <YStack key={field}>
+            <SizableText>{field.charAt(0).toUpperCase() + field.slice(1)}</SizableText>
+            <input
+              type={field === 'email' ? 'email' : 'url'}
+              name={field}
+              defaultValue={contactInfo?.[field] || ''}
+              placeholder={`Enter ${field}`}
+              style={{ padding: 8, width: '100%' }}
+            />
+          </YStack>
+        ))}
+        <Button width="100%" type="submit">
+          Save Contact Info
+        </Button>
       </form>
     </YStack>
   );
