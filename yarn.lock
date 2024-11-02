@@ -6659,7 +6659,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chokidar@npm:^3.5.2":
+"chokidar@npm:^3.5.2, chokidar@npm:^3.6.0":
   version: 3.6.0
   resolution: "chokidar@npm:3.6.0"
   dependencies:
@@ -6675,15 +6675,6 @@ __metadata:
     fsevents:
       optional: true
   checksum: 10/c327fb07704443f8d15f7b4a7ce93b2f0bc0e6cea07ec28a7570aa22cd51fcf0379df589403976ea956c369f25aa82d84561947e227cd925902e1751371658df
-  languageName: node
-  linkType: hard
-
-"chokidar@npm:^4.0.1":
-  version: 4.0.1
-  resolution: "chokidar@npm:4.0.1"
-  dependencies:
-    readdirp: "npm:^4.0.1"
-  checksum: 10/62749d2173a60cc5632d6c6e0b7024f33aadce47b06d02e55ad03c7b8daaaf2fc85d4296c047473d04387fd992dab9384cc5263c70a3dc3018b7ebecfb5b5217
   languageName: node
   linkType: hard
 
@@ -7613,15 +7604,13 @@ __metadata:
     expo-system-ui: "npm:~3.0.7"
     expo-web-browser: "npm:~13.0.3"
     react: "npm:18.2.0"
-    react-dom: "npm:18.3.1"
+    react-dom: "npm:18.2.0"
     react-native: "npm:0.74.5"
-    react-native-flipper: "npm:^0.271.0"
     react-native-reanimated: "npm:~3.15.1"
     react-native-safe-area-context: "npm:4.10.5"
     react-native-screens: "npm:3.31.1"
     react-native-svg: "npm:15.6.0"
     react-native-web: "npm:^0.19.12"
-    react-query-native-devtools: "npm:^4.0.0"
     tamagui: "npm:^1.115.4"
     typescript: "npm:^5.5.2"
     zustand: "npm:^5.0.0"
@@ -8836,13 +8825,6 @@ __metadata:
   dependencies:
     micromatch: "npm:^4.0.2"
   checksum: 10/7fa7942849eef4d5385ee96a0a9a5a9afe885836fd72ed6a4280312a38690afea275e7d09b343fe97daf0412d833f8ac4b78c17fc756386d9ebebf0759d707a7
-  languageName: node
-  linkType: hard
-
-"flatted@npm:^3.2.4":
-  version: 3.3.1
-  resolution: "flatted@npm:3.3.1"
-  checksum: 10/7b8376061d5be6e0d3658bbab8bde587647f68797cf6bfeae9dea0e5137d9f27547ab92aaff3512dd9d1299086a6d61be98e9d48a56d17531b634f77faadbc49
   languageName: node
   linkType: hard
 
@@ -10352,11 +10334,11 @@ __metadata:
   linkType: hard
 
 "jiti@npm:^2.1.2":
-  version: 2.3.3
-  resolution: "jiti@npm:2.3.3"
+  version: 2.4.0
+  resolution: "jiti@npm:2.4.0"
   bin:
     jiti: lib/jiti-cli.mjs
-  checksum: 10/21d1e89d909101c702769537e75ad87b433f980bc6938a6f64a90d1fbe7cb1510a0d4b82d4020b3093b47cebff5568af5e39d883e26aa4413564ced43b8cfd84
+  checksum: 10/10aa999a4f9bccc82b1dab9ebaf4484a8770450883c1bf7fafc07f8fca1e417fd8e7731e651337d1060c9e2ff3f97362dcdfd27e86d1f385db97f4adf7b5a21d
   languageName: node
   linkType: hard
 
@@ -12857,7 +12839,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:18.3.1, react-dom@npm:>=18.0.0":
+"react-dom@npm:18.2.0":
+  version: 18.2.0
+  resolution: "react-dom@npm:18.2.0"
+  dependencies:
+    loose-envify: "npm:^1.1.0"
+    scheduler: "npm:^0.23.0"
+  peerDependencies:
+    react: ^18.2.0
+  checksum: 10/ca5e7762ec8c17a472a3605b6f111895c9f87ac7d43a610ab7024f68cd833d08eda0625ce02ec7178cc1f3c957cf0b9273cdc17aa2cd02da87544331c43b1d21
+  languageName: node
+  linkType: hard
+
+"react-dom@npm:>=18.0.0":
   version: 18.3.1
   resolution: "react-dom@npm:18.3.1"
   dependencies:
@@ -12926,16 +12920,6 @@ __metadata:
     react-native-svg:
       optional: true
   checksum: 10/5d99c7bfe0ef7b75032b60b162c3991fa162d200d3c5f64935e6a31c888173532bf06e6a551286b18ad20f419926af8fb64aa6884feccd76f38aacae517acbf5
-  languageName: node
-  linkType: hard
-
-"react-native-flipper@npm:^0.271.0":
-  version: 0.271.0
-  resolution: "react-native-flipper@npm:0.271.0"
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
-    react-native: ">0.62.0"
-  checksum: 10/6d46842e01c4cb24778f44d3d8abd4a2f6fbc574adef76cf11818b97bef6282a9e3ebbd6d6ba32d733595a832f1a6a79ca6009e3d9d75483d0840d8ad1eadcc3
   languageName: node
   linkType: hard
 
@@ -13095,18 +13079,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-query-native-devtools@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "react-query-native-devtools@npm:4.0.0"
-  dependencies:
-    flatted: "npm:^3.2.4"
-  peerDependencies:
-    react-native-flipper: ^0.127.0
-    react-query: ^3.34.6
-  checksum: 10/7da16b14a59ac19805c315a25ab2c090cc277afe22aee412a743eda5296f282a91c0b35a269d015fbf27781e9c8b65c1a642a6fd5fc258a9318821a27c6da652
-  languageName: node
-  linkType: hard
-
 "react-refresh@npm:^0.14.0, react-refresh@npm:^0.14.2":
   version: 0.14.2
   resolution: "react-refresh@npm:0.14.2"
@@ -13219,13 +13191,6 @@ __metadata:
     string_decoder: "npm:~1.1.1"
     util-deprecate: "npm:~1.0.1"
   checksum: 10/8500dd3a90e391d6c5d889256d50ec6026c059fadee98ae9aa9b86757d60ac46fff24fafb7a39fa41d54cb39d8be56cc77be202ebd4cd8ffcf4cb226cbaa40d4
-  languageName: node
-  linkType: hard
-
-"readdirp@npm:^4.0.1":
-  version: 4.0.2
-  resolution: "readdirp@npm:4.0.2"
-  checksum: 10/4ef93103307c7d5e42e78ecf201db58c984c4d66882a27c956250478b49c2444b1ff6aea8ce0f5e4157b2c07ce2fe870ad16c92ebd7c6ff30391ded6e42b9873
   languageName: node
   linkType: hard
 
@@ -13659,7 +13624,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"scheduler@npm:^0.23.2":
+"scheduler@npm:^0.23.0, scheduler@npm:^0.23.2":
   version: 0.23.2
   resolution: "scheduler@npm:0.23.2"
   dependencies:
@@ -15153,11 +15118,11 @@ __metadata:
   linkType: hard
 
 "unstorage@npm:^1.10.2":
-  version: 1.13.0
-  resolution: "unstorage@npm:1.13.0"
+  version: 1.13.1
+  resolution: "unstorage@npm:1.13.1"
   dependencies:
     anymatch: "npm:^3.1.3"
-    chokidar: "npm:^4.0.1"
+    chokidar: "npm:^3.6.0"
     citty: "npm:^0.1.6"
     destr: "npm:^2.0.3"
     h3: "npm:^1.13.0"
@@ -15207,7 +15172,7 @@ __metadata:
       optional: true
     ioredis:
       optional: true
-  checksum: 10/64178d61b0dc4a304edbf2de6256cd7d60e2fe41dc30cf22fa9d28a6ff563bda2c772de1af6899e96f976157eaef114662e056669a0b307382fb28bfdbfd3619
+  checksum: 10/a5fea4f83189d222dcb95ce36d0de29b1ab2fa64122f4c4435b63e6dab8bacd630f6234b0599a505de620f719965ea3a3ce068ece759a96e19fd187e1fb9561c
   languageName: node
   linkType: hard
 

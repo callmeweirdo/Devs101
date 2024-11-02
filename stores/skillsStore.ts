@@ -1,4 +1,4 @@
-import create from 'zustand';
+import {create} from 'zustand';
 import { clerkClient } from '@clerk/clerk-expo';
 
 interface Skill {
