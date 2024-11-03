@@ -1,4 +1,4 @@
-import {create} from 'zustand';
+import { create } from 'zustand';
 import { clerkClient } from '@clerk/clerk-expo';
 
 interface Skill {
@@ -15,15 +15,25 @@ interface SkillsStore {
 
 export const useSkillsStore = create<SkillsStore>((set) => ({
   skills: [],
+
   setSkills: (skills) => set({ skills }),
 
   fetchSkills: async (userId: string) => {
-    const user = await clerkClient.users.getUser(userId);
-    set({ skills: user.privateMetadata.skills || [] });
+    try {
+      const user = await clerkClient.users.getUser(userId);
+      const fetchedSkills = user.privateMetadata.skills as Skill[] | undefined;
+      set({ skills: fetchedSkills || [] });
+    } catch (error) {
+      console.error("Error fetching skills:", error);
+    }
   },
 
   updateSkills: async (userId: string, skills: Skill[]) => {
-    await clerkClient.users.updateUser(userId, { privateMetadata: { skills } });
-    set({ skills });
+    try {
+      await clerkClient.users.updateUser(userId, { privateMetadata: { skills } });
+      set({ skills }); // Update the store with the latest skills
+    } catch (error) {
+      console.error("Error updating skills:", error);
+    }
   },
 }));

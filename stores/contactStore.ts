@@ -1,4 +1,4 @@
-import {create} from 'zustand';
+import { create } from 'zustand';
 import { clerkClient } from '@clerk/clerk-expo';
 
 interface ContactInfo {
@@ -19,12 +19,28 @@ export const useContactStore = create<ContactStore>((set) => ({
   setContactInfo: (contactInfo) => set({ contactInfo }),
 
   fetchContactInfo: async (userId: string) => {
-    const user = await clerkClient.users.getUser(userId);
-    set({ contactInfo: user.privateMetadata.contact || {} });
+    try {
+      if (!clerkClient || !clerkClient.users) {
+        throw new Error('Clerk client is not properly initialized');
+      }
+      
+      const user = await clerkClient.users.getUser(userId);
+      set({ contactInfo: user.privateMetadata.contact || {} });
+    } catch (error) {
+      console.error("Error fetching contact info:", error);
+    }
   },
 
   updateContactInfo: async (userId: string, contactInfo: ContactInfo) => {
-    await clerkClient.users.updateUser(userId, { privateMetadata: { contact: contactInfo } });
-    set({ contactInfo });
+    try {
+      if (!clerkClient || !clerkClient.users) {
+        throw new Error('Clerk client is not properly initialized');
+      }
+
+      await clerkClient.users.updateUser(userId, { privateMetadata: { contact: contactInfo } });
+      set({ contactInfo });
+    } catch (error) {
+      console.error("Error updating contact info:", error);
+    }
   },
 }));

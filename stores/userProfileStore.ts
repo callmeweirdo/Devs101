@@ -1,6 +1,5 @@
-import {create} from 'zustand';
-import { clerkClient } from '@clerk/clerk-expo';
-import { User } from '@clerk/clerk-expo';
+import { create } from 'zustand';
+import { clerkClient, User } from '@clerk/clerk-expo';
 
 interface UserProfileStore {
   userProfile: User | null;
@@ -11,15 +10,24 @@ interface UserProfileStore {
 
 export const useUserProfileStore = create<UserProfileStore>((set) => ({
   userProfile: null,
+
   setUserProfile: (profile) => set({ userProfile: profile }),
 
   fetchUserProfile: async (userId: string) => {
-    const user = await clerkClient.users.getUser(userId);
-    set({ userProfile: user });
+    try {
+      const user = await clerkClient.users.getUser(userId);
+      set({ userProfile: user });
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+    }
   },
 
   updateUserProfile: async (userId: string, profile: Partial<User>) => {
-    await clerkClient.users.updateUser(userId, { privateMetadata: { ...profile } });
-    set((state) => ({ userProfile: { ...state.userProfile, ...profile } }));
+    try {
+      const updatedUser = await clerkClient.users.updateUser(userId, { privateMetadata: { ...profile } });
+      set({ userProfile: updatedUser }); // Update the store with the latest user data
+    } catch (error) {
+      console.error("Error updating user profile:", error);
+    }
   },
 }));

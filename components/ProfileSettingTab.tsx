@@ -1,24 +1,21 @@
 import React, { useCallback } from 'react';
-import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
+import useIsomorphicLayoutEffect from 'useIsomorphicLayoutEffect';
 import { useUserProfileStore } from 'stores/userProfileStore';
 import { useSkillsStore } from 'stores/skillsStore';
 import { useProjectsStore } from 'stores/projectsStore';
 import { useContactStore } from 'stores/contactStore';
 import { Button, SizableText, Separator, Tabs, YStack } from 'tamagui';
-import { clerkClient } from '@clerk/clerk-react';
-import { useLocalSearchParams } from 'expo-router';
+import { clerkClient, useUser } from '@clerk/clerk-react';
 
-const fetchUserMetadata = async (userId: string) => {
-  const user = await clerkClient.users.getUser(userId);
-  return user;
-};
 
 const ProfileSettingTab: React.FC = () => {
-  const { userId } = useLocalSearchParams<{ dev: string }>();
-  const { fetchUserProfile, setUserProfile } = useUserProfileStore();
-  const { fetchSkills, setSkills } = useSkillsStore();
-  const { fetchProjects, setProjects } = useProjectsStore();
-  const { fetchContactInfo, setContactInfo } = useContactStore();
+  const { user } = useUser();
+  const userId = user?.id;
+
+  const { fetchUserProfile, userProfile } = useUserProfileStore();
+  const { fetchSkills, skills } = useSkillsStore();
+  const { fetchProjects, projects } = useProjectsStore();
+  const { fetchContactInfo, contactInfo } = useContactStore();
 
   useIsomorphicLayoutEffect(() => {
     if (userId) {
@@ -31,47 +28,51 @@ const ProfileSettingTab: React.FC = () => {
 
   return (
     <YStack alignItems="center" justifyContent="center" padding="$4" flex={1}>
-      <Tabs
-        defaultValue="profile"
-        orientation="horizontal"
-        flexDirection="column"
-        width="100%"
-        maxWidth={700}
-        height="auto"
-        borderRadius="$4"
-        borderWidth="$0.25"
-        overflow="hidden"
-        borderColor="$borderColor"
-      >
-        <Tabs.List
-          separator={<Separator vertical />}
-          aria-label="Edit your profile"
-          justifyContent="center"
+      {userProfile && skills && projects && contactInfo && (
+        <Tabs
+          defaultValue="profile"
+          orientation="horizontal"
+          flexDirection="column"
+          width="100%"
+          maxWidth={700}
+          height="auto"
+          borderRadius="$4"
+          borderWidth="$0.25"
+          overflow="hidden"
+          borderColor="$borderColor"
         >
-          {['profile', 'skills', 'projects', 'contact'].map((tab) => (
-            <Tabs.Tab key={tab} flex={1} value={tab}>
-              <SizableText fontFamily="$body">{tab.charAt(0).toUpperCase() + tab.slice(1)}</SizableText>
-            </Tabs.Tab>
-          ))}
-        </Tabs.List>
-        <Separator />
+          <Tabs.List
+            separator={<Separator vertical />}
+            aria-label="Edit your profile"
+            justifyContent="center"
+          >
+            {['profile', 'skills', 'projects', 'contact'].map((tab) => (
+              <Tabs.Tab key={tab} flex={1} value={tab}>
+                <SizableText fontFamily="$body">
+                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                </SizableText>
+              </Tabs.Tab>
+            ))}
+          </Tabs.List>
+          <Separator />
 
-        <Tabs.Content value="profile">
-          <ProfileEditForm />
-        </Tabs.Content>
+          <Tabs.Content value="profile">
+            <ProfileEditForm />
+          </Tabs.Content>
 
-        <Tabs.Content value="skills">
-          <SkillsEditForm />
-        </Tabs.Content>
+          <Tabs.Content value="skills">
+            <SkillsEditForm />
+          </Tabs.Content>
 
-        <Tabs.Content value="projects">
-          <ProjectsEditForm />
-        </Tabs.Content>
+          <Tabs.Content value="projects">
+            <ProjectsEditForm />
+          </Tabs.Content>
 
-        <Tabs.Content value="contact">
-          <ContactEditForm />
-        </Tabs.Content>
-      </Tabs>
+          <Tabs.Content value="contact">
+            <ContactEditForm />
+          </Tabs.Content>
+        </Tabs>
+      )}
     </YStack>
   );
 };
@@ -80,10 +81,10 @@ const ProfileSettingTab: React.FC = () => {
 const ProfileEditForm: React.FC = () => {
   const { userProfile, updateUserProfile } = useUserProfileStore();
 
-  const handleSubmit = useCallback(
-    (e) => {
+  const handleProfileSubmit = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      const formData = new FormData(e.target);
+      const formData = new FormData(e.currentTarget);
       const newProfile = {
         name: formData.get('name') as string,
         location: formData.get('location') as string,
@@ -98,7 +99,7 @@ const ProfileEditForm: React.FC = () => {
   return (
     <YStack padding="$3" gap="$3" width="100%">
       <SizableText fontSize="$5">Edit Profile Information</SizableText>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleProfileSubmit}>
         {['name', 'location', 'bio', 'profilePhotoUrl'].map((field) => (
           <YStack key={field}>
             <SizableText>{field.charAt(0).toUpperCase() + field.slice(1)}</SizableText>
@@ -107,6 +108,7 @@ const ProfileEditForm: React.FC = () => {
               name={field}
               defaultValue={userProfile?.[field] || ''}
               placeholder={`Enter your ${field}`}
+              aria-label={`Enter your ${field}`}
               style={{ padding: 8, width: '100%' }}
             />
           </YStack>
@@ -123,10 +125,10 @@ const ProfileEditForm: React.FC = () => {
 const SkillsEditForm: React.FC = () => {
   const { skills, updateSkills } = useSkillsStore();
 
-  const handleSubmit = useCallback(
-    (e) => {
+  const handleSkillsSubmit = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      const formData = new FormData(e.target);
+      const formData = new FormData(e.currentTarget);
       const skill = formData.get('skill') as string;
       const proficiency = formData.get('proficiency') as string;
       updateSkills([...skills, { skill, proficiency }]);
@@ -137,7 +139,7 @@ const SkillsEditForm: React.FC = () => {
   return (
     <YStack padding="$3" gap="$3" width="100%">
       <SizableText fontSize="$5">Edit Skills</SizableText>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSkillsSubmit}>
         {['skill', 'proficiency'].map((field) => (
           <YStack key={field}>
             <SizableText>{field.charAt(0).toUpperCase() + field.slice(1)}</SizableText>
@@ -145,6 +147,7 @@ const SkillsEditForm: React.FC = () => {
               type="text"
               name={field}
               placeholder={`Enter ${field}`}
+              aria-label={`Enter ${field}`}
               style={{ padding: 8, width: '100%' }}
             />
           </YStack>
@@ -161,10 +164,10 @@ const SkillsEditForm: React.FC = () => {
 const ProjectsEditForm: React.FC = () => {
   const { projects, updateProjects } = useProjectsStore();
 
-  const handleSubmit = useCallback(
-    (e) => {
+  const handleProjectsSubmit = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      const formData = new FormData(e.target);
+      const formData = new FormData(e.currentTarget);
       const name = formData.get('projectName') as string;
       const link = formData.get('projectLink') as string;
       updateProjects([...projects, { name, link }]);
@@ -175,7 +178,7 @@ const ProjectsEditForm: React.FC = () => {
   return (
     <YStack padding="$3" gap="$3" width="100%">
       <SizableText fontSize="$5">Edit Projects</SizableText>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleProjectsSubmit}>
         {['projectName', 'projectLink'].map((field) => (
           <YStack key={field}>
             <SizableText>{field.replace('project', '').trim()}</SizableText>
@@ -183,6 +186,7 @@ const ProjectsEditForm: React.FC = () => {
               type={field === 'projectLink' ? 'url' : 'text'}
               name={field}
               placeholder={`Enter ${field}`}
+              aria-label={`Enter ${field}`}
               style={{ padding: 8, width: '100%' }}
             />
           </YStack>
@@ -199,10 +203,10 @@ const ProjectsEditForm: React.FC = () => {
 const ContactEditForm: React.FC = () => {
   const { contactInfo, updateContactInfo } = useContactStore();
 
-  const handleSubmit = useCallback(
-    (e) => {
+  const handleContactSubmit = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      const formData = new FormData(e.target);
+      const formData = new FormData(e.currentTarget);
       const newContactInfo = {
         twitter: formData.get('twitter') as string,
         linkedIn: formData.get('linkedIn') as string,
@@ -216,7 +220,7 @@ const ContactEditForm: React.FC = () => {
   return (
     <YStack padding="$3" gap="$3" width="100%">
       <SizableText fontSize="$5">Edit Contact Information</SizableText>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleContactSubmit}>
         {['twitter', 'linkedIn', 'email'].map((field) => (
           <YStack key={field}>
             <SizableText>{field.charAt(0).toUpperCase() + field.slice(1)}</SizableText>
@@ -225,6 +229,7 @@ const ContactEditForm: React.FC = () => {
               name={field}
               defaultValue={contactInfo?.[field] || ''}
               placeholder={`Enter ${field}`}
+              aria-label={`Enter ${field}`}
               style={{ padding: 8, width: '100%' }}
             />
           </YStack>
