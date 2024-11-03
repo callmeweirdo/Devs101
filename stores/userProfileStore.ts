@@ -25,7 +25,7 @@ export const useUserProfileStore = create<UserProfileStore>((set) => ({
   updateUserProfile: async (userId: string, profile: Partial<User>) => {
     try {
       const updatedUser = await clerkClient.users.updateUser(userId, { privateMetadata: { ...profile } });
-      set({ userProfile: updatedUser }); // Update the store with the latest user data
+      set({ userProfile: updatedUser });
     } catch (error) {
       console.error("Error updating user profile:", error);
     }

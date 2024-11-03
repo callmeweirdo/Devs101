@@ -22,14 +22,7 @@ export const useProjectsStore = create<ProjectsStore>((set) => ({
     try {
       const user = await clerkClient.users.getUser(userId);
       const fetchedProjects = user.privateMetadata.projects as Project[] | undefined;
-
-      // Check if fetchedProjects is defined and is an array
-      if (Array.isArray(fetchedProjects)) {
-        set({ projects: fetchedProjects });
-      } else {
-        console.warn("Fetched projects are not an array or are undefined.");
-        set({ projects: [] }); // Reset to an empty array if no valid projects found
-      }
+      set({ projects: fetchedProjects || [] });
     } catch (error) {
       console.error("Error fetching projects:", error);
     }
@@ -38,7 +31,7 @@ export const useProjectsStore = create<ProjectsStore>((set) => ({
   updateProjects: async (userId: string, projects: Project[]) => {
     try {
       await clerkClient.users.updateUser(userId, { privateMetadata: { projects } });
-      set({ projects }); // Update the store with the new projects list
+      set({ projects });
     } catch (error) {
       console.error("Error updating projects:", error);
     }

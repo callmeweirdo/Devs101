@@ -31,7 +31,7 @@ export const useSkillsStore = create<SkillsStore>((set) => ({
   updateSkills: async (userId: string, skills: Skill[]) => {
     try {
       await clerkClient.users.updateUser(userId, { privateMetadata: { skills } });
-      set({ skills }); // Update the store with the latest skills
+      set({ skills });
     } catch (error) {
       console.error("Error updating skills:", error);
     }

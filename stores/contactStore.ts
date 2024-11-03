@@ -16,14 +16,11 @@ interface ContactStore {
 
 export const useContactStore = create<ContactStore>((set) => ({
   contactInfo: {},
+
   setContactInfo: (contactInfo) => set({ contactInfo }),
 
   fetchContactInfo: async (userId: string) => {
     try {
-      if (!clerkClient || !clerkClient.users) {
-        throw new Error('Clerk client is not properly initialized');
-      }
-      
       const user = await clerkClient.users.getUser(userId);
       set({ contactInfo: user.privateMetadata.contact || {} });
     } catch (error) {
@@ -33,10 +30,6 @@ export const useContactStore = create<ContactStore>((set) => ({
 
   updateContactInfo: async (userId: string, contactInfo: ContactInfo) => {
     try {
-      if (!clerkClient || !clerkClient.users) {
-        throw new Error('Clerk client is not properly initialized');
-      }
-
       await clerkClient.users.updateUser(userId, { privateMetadata: { contact: contactInfo } });
       set({ contactInfo });
     } catch (error) {
