@@ -3,7 +3,7 @@ import { useUser } from '@clerk/clerk-react';
 import { Button, SizableText, Separator, Tabs, YStack } from 'tamagui';
 
 const ProfileSettingTab: React.FC = () => {
-  const { user, updateUser } = useUser();
+  const { user } = useUser();
 
   const [userProfile, setUserProfile] = useState({
     name: '',
@@ -40,7 +40,7 @@ const ProfileSettingTab: React.FC = () => {
   }, [user]);
 
   const updateMetadata = async (newData: any) => {
-    await updateUser({ unsafeMetadata: { ...user.unsafeMetadata, ...newData } });
+    await user.update({ unsafeMetadata: { ...user.unsafeMetadata, ...newData } });
   };
 
   const handleProfileSubmit = async (profileData: any) => {
@@ -224,10 +224,11 @@ const ContactEditForm: React.FC<{ contactInfo: any; onSubmit: (data: any) => voi
           <YStack key={field}>
             <SizableText>{field.charAt(0).toUpperCase() + field.slice(1)}</SizableText>
             <input
-              type={field === 'email' ? 'email' : 'url'}
+              type="text"
               value={formData[field] || ''}
               onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
-              placeholder={`Enter ${field}`}
+              placeholder={`Enter your ${field}`}
+              aria-label={`Enter your ${field}`}
               style={{ padding: 8, width: '100%' }}
             />
           </YStack>
