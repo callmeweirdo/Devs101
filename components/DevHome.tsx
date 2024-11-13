@@ -8,6 +8,7 @@ import { useUser } from '@clerk/clerk-expo';
 const DevHome = () => {
   const { dev } = useLocalSearchParams<{ dev: string }>();
   const { user } = useUser();
+  const metadata = user?.unsafeMetadata || {};
 
   return (
     <View style={styles.container}>
@@ -31,23 +32,23 @@ const DevHome = () => {
         >
           {/* Profile Image */}
           <Image
-            source={{ uri: 'https://cdn.dribbble.com/userupload/5859589/file/original-55534b3895c5e6fee63696b7418eade7.png?resize=752x' }}
+            source={{ uri: metadata.profilePhotoUrl || 'https://cdn.dribbble.com/userupload/5859589/file/original-55534b3895c5e6fee63696b7418eade7.png?resize=752x' }}
             style={styles.profileImage}
           />
 
           {/* Full Name */}
-          <Text style={styles.fullName}>{user?.fullName || 'Developer Name'}</Text>
+          <Text style={styles.fullName}>{metadata.userProfile?.name || user?.fullName || 'Developer Name'}</Text>
 
           {/* Social Media Links */}
           <Text style={styles.subheading}>Find me on</Text>
           <XStack space="$3" marginTop="$2">
-            <Anchor href="https://github.com" target="_blank">
+            <Anchor href={metadata.contact?.github || "https://github.com"} target="_blank">
               <Image source={{ uri: 'https://image.flaticon.com/icons/png/512/25/25231.png' }} style={styles.icon} />
             </Anchor>
-            <Anchor href="https://linkedin.com" target="_blank">
+            <Anchor href={metadata.contact?.linkedIn || "https://linkedin.com"} target="_blank">
               <Image source={{ uri: 'https://image.flaticon.com/icons/png/512/61/61109.png' }} style={styles.icon} />
             </Anchor>
-            <Anchor href="https://twitter.com" target="_blank">
+            <Anchor href={metadata.contact?.twitter || "https://twitter.com"} target="_blank">
               <Image source={{ uri: 'https://image.flaticon.com/icons/png/512/733/733579.png' }} style={styles.icon} />
             </Anchor>
           </XStack>
@@ -62,15 +63,14 @@ const DevHome = () => {
           justifyContent="center"
           $sm={{ flex: 1 }}
         >
-          <Text style={styles.title}>Hi, I'm {dev}</Text>
+          <Text style={styles.title}>Hi, I'm {dev || metadata.userProfile?.name}</Text>
           <Text style={styles.description}>
-            I'm a passionate developer specializing in web3 and mobile app development.
-            I love building seamless, high-performance applications with cutting-edge technologies.
+            {metadata.userProfile?.bio || "I'm a passionate developer specializing in web3 and mobile app development. I love building seamless, high-performance applications with cutting-edge technologies."}
           </Text>
 
           <Text style={styles.subheading}>Contact Me</Text>
-          <Text>Email: {user?.emailAddresses[0].emailAddress || 'developer@example.com'}</Text>
-          <Text>Location: Abuja, Nigeria</Text>
+          <Text>Email: {metadata.contact?.email || user?.emailAddresses[0]?.emailAddress || 'developer@example.com'}</Text>
+          <Text>Location: {metadata.location || 'Unknown Location'}</Text>
 
           {/* Action Buttons */}
           <XStack space="$3" marginTop="$4" alignItems="center">
@@ -80,7 +80,7 @@ const DevHome = () => {
             <Button onPress={() => alert('Followed!')} theme="green" size="$4" icon={<Icon name="user-plus" size={20} color="#fff" />}>
               Follow
             </Button>
-            <Anchor href="https://yourportfolio.com" target="_blank">
+            <Anchor href={metadata.projects?.[0]?.link || "https://yourportfolio.com"} target="_blank">
               <Button theme="blue" size="$4" icon={<Icon name="link" size={20} color="#fff" />}>
                 Portfolio
               </Button>
