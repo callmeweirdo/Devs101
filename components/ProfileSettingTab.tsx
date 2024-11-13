@@ -21,7 +21,6 @@ const ProfileSettingTab: React.FC = () => {
 
   useEffect(() => {
     if (user) {
-      // Fetch data from Clerk's unsafeMetadata when the user is authenticated
       const metadata = user.unsafeMetadata || {};
       setUserProfile({
         name: user.fullName || '',
@@ -45,7 +44,7 @@ const ProfileSettingTab: React.FC = () => {
 
   const handleProfileSubmit = async (profileData: any) => {
     setUserProfile(profileData);
-    await updateMetadata({ location: profileData.location, bio: profileData.bio });
+    await updateMetadata({ location: profileData.location, bio: profileData.bio, profilePhotoUrl: profileData.profilePhotoUrl });
   };
 
   const handleSkillsSubmit = async (newSkill: any) => {
@@ -112,7 +111,7 @@ const ProfileEditForm: React.FC<{ userProfile: any; onSubmit: (data: any) => voi
     <YStack padding="$3" gap="$3" width="100%">
       <SizableText fontSize="$5">Edit Profile Information</SizableText>
       <form onSubmit={handleSubmit}>
-        {['name', 'location', 'bio'].map((field) => (
+        {['name', 'location', 'bio', 'profilePhotoUrl'].map((field) => (
           <YStack key={field}>
             <SizableText>{field.charAt(0).toUpperCase() + field.slice(1)}</SizableText>
             <input
@@ -135,12 +134,12 @@ const ProfileEditForm: React.FC<{ userProfile: any; onSubmit: (data: any) => voi
 
 // Skills Edit Form
 const SkillsEditForm: React.FC<{ skills: any[]; onSubmit: (skill: any) => void }> = ({ skills, onSubmit }) => {
-  const [skillData, setSkillData] = useState({ skill: '', proficiency: '' });
+  const [skillData, setSkillData] = useState({ skill: '', proficiency: '', imageUrl: '' });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await onSubmit(skillData);
-    setSkillData({ skill: '', proficiency: '' });
+    setSkillData({ skill: '', proficiency: '', imageUrl: '' });
   };
 
   return (
@@ -158,7 +157,14 @@ const SkillsEditForm: React.FC<{ skills: any[]; onSubmit: (skill: any) => void }
           type="text"
           value={skillData.proficiency}
           onChange={(e) => setSkillData({ ...skillData, proficiency: e.target.value })}
-          placeholder="Enter proficiency"
+          placeholder="Enter proficiency (e.g., 80%)"
+          style={{ padding: 8, width: '100%' }}
+        />
+        <input
+          type="url"
+          value={skillData.imageUrl}
+          onChange={(e) => setSkillData({ ...skillData, imageUrl: e.target.value })}
+          placeholder="Skill Image URL"
           style={{ padding: 8, width: '100%' }}
         />
         <Button width="100%" type="submit">
@@ -171,12 +177,12 @@ const SkillsEditForm: React.FC<{ skills: any[]; onSubmit: (skill: any) => void }
 
 // Projects Edit Form
 const ProjectsEditForm: React.FC<{ projects: any[]; onSubmit: (project: any) => void }> = ({ projects, onSubmit }) => {
-  const [projectData, setProjectData] = useState({ name: '', link: '' });
+  const [projectData, setProjectData] = useState({ name: '', link: '', description: '', imageUrl: '' });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await onSubmit(projectData);
-    setProjectData({ name: '', link: '' });
+    setProjectData({ name: '', link: '', description: '', imageUrl: '' });
   };
 
   return (
@@ -197,6 +203,20 @@ const ProjectsEditForm: React.FC<{ projects: any[]; onSubmit: (project: any) => 
           placeholder="Project Link"
           style={{ padding: 8, width: '100%' }}
         />
+        <input
+          type="text"
+          value={projectData.description}
+          onChange={(e) => setProjectData({ ...projectData, description: e.target.value })}
+          placeholder="Project Description"
+          style={{ padding: 8, width: '100%' }}
+        />
+        <input
+          type="url"
+          value={projectData.imageUrl}
+          onChange={(e) => setProjectData({ ...projectData, imageUrl: e.target.value })}
+          placeholder="Project Image URL"
+          style={{ padding: 8, width: '100%' }}
+        />
         <Button width="100%" type="submit">
           Add Project
         </Button>
@@ -207,13 +227,13 @@ const ProjectsEditForm: React.FC<{ projects: any[]; onSubmit: (project: any) => 
 
 // Contact Edit Form
 const ContactEditForm: React.FC<{ contactInfo: any; onSubmit: (data: any) => void }> = ({ contactInfo, onSubmit }) => {
-  const [formData, setFormData] = useState(contactInfo);
+  const [contactData, setContactData] = useState(contactInfo);
 
-  useEffect(() => setFormData(contactInfo), [contactInfo]);
+  useEffect(() => setContactData(contactInfo), [contactInfo]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await onSubmit(formData);
+    await onSubmit(contactData);
   };
 
   return (
@@ -225,10 +245,9 @@ const ContactEditForm: React.FC<{ contactInfo: any; onSubmit: (data: any) => voi
             <SizableText>{field.charAt(0).toUpperCase() + field.slice(1)}</SizableText>
             <input
               type="text"
-              value={formData[field] || ''}
-              onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
-              placeholder={`Enter your ${field}`}
-              aria-label={`Enter your ${field}`}
+              value={contactData[field] || ''}
+              onChange={(e) => setContactData({ ...contactData, [field]: e.target.value })}
+              placeholder={`Enter your ${field} link`}
               style={{ padding: 8, width: '100%' }}
             />
           </YStack>
