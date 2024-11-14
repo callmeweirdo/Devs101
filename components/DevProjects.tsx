@@ -1,7 +1,8 @@
 import type { CardProps } from 'tamagui';
 import { H2, H3, Button, Card, Image, Paragraph, XStack, YStack } from 'tamagui';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
+import { useUser } from '@clerk/clerk-react';
 
 type Project = {
   name: string;
@@ -10,54 +11,20 @@ type Project = {
   link: string; // Link to the project
 };
 
-const projects: Project[] = [
-  {
-    name: 'My Portfolio Website',
-    description: 'A personal portfolio showcasing my projects and skills.',
-    imageUri: 'https://via.placeholder.com/150',
-    link: 'https://myportfolio.com',
-  },
-  {
-    name: 'E-commerce App',
-    description: 'A full-featured e-commerce application with user authentication.',
-    imageUri: 'https://via.placeholder.com/150',
-    link: 'https://ecommerceapp.com',
-  },
-  {
-    name: 'Blockchain Voting System',
-    description: 'A decentralized voting system using blockchain technology.',
-    imageUri: 'https://via.placeholder.com/150',
-    link: 'https://votingsystem.com',
-  },
-  {
-    name: 'Chat Application',
-    description: 'Real-time chat application built with React and Firebase.',
-    imageUri: 'https://via.placeholder.com/150',
-    link: 'https://chatapp.com',
-  },{
-    name: 'Chat Application',
-    description: 'Real-time chat application built with React and Firebase.',
-    imageUri: 'https://via.placeholder.com/150',
-    link: 'https://chatapp.com',
-  },{
-    name: 'Chat Application',
-    description: 'Real-time chat application built with React and Firebase.',
-    imageUri: 'https://via.placeholder.com/150',
-    link: 'https://chatapp.com',
-  },{
-    name: 'Chat Application',
-    description: 'Real-time chat application built with React and Firebase.',
-    imageUri: 'https://via.placeholder.com/150',
-    link: 'https://chatapp.com',
-  },{
-    name: 'Chat Application',
-    description: 'Real-time chat application built with React and Firebase.',
-    imageUri: 'https://via.placeholder.com/150',
-    link: 'https://chatapp.com',
-  },
-];
-
 export function DevProjects() {
+  const { user } = useUser();
+  const [projects, setProjects] = useState<Project[]>([]);
+
+  useEffect(() => {
+    if (user) {
+      // Fetch projects from Clerk's unsafeMetadata
+      const userProjects = user.unsafeMetadata?.projects as Project[] | undefined;
+      if (userProjects) {
+        setProjects(userProjects);
+      }
+    }
+  }, [user]);
+
   return (
     <YStack space="$4" alignItems="center" paddingHorizontal="$4" paddingVertical="$6">
       {/* Title Section */}
