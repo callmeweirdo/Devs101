@@ -3,7 +3,7 @@ import React from 'react';
 import { useLocalSearchParams } from 'expo-router';
 import DevHome from 'components/DevHome';
 import { DevSkill } from 'components/DevSkill';
-import { DevProjects } from 'components/DevProjects';
+import DevProjectCard  from 'components/DevProjects';
 
 const Dev = () => {
   const { dev } = useLocalSearchParams<{ dev: string }>();
@@ -17,7 +17,7 @@ const Dev = () => {
       <YStack space="$5">
         <DevHome />
         <DevSkill />
-        <DevProjects />
+        <DevProjectCard />
       </YStack>
     </ScrollView>
   );

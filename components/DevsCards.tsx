@@ -1,9 +1,11 @@
-import type { CardProps } from 'tamagui';
-import { Button, Card, H2, Image, Paragraph, XStack, YStack } from 'tamagui';
+import { Button, Card, H2, Image, Paragraph, ScrollView, XStack, YStack } from 'tamagui';
 import { Link } from 'expo-router';
 import React from 'react';
 
-export function CardDemo() {
+
+
+// DevsProfileCards Component
+export function DevsCardProfiles() {
   const devsData = [
     { title: 'Dev101', description: 'Now available', imageUri: 'https://image.pngaaa.com/743/6496743-middle.png' },
     { title: 'Dev102', description: 'Available soon', imageUri: 'https://image.pngaaa.com/743/6496743-middle.png' },
@@ -14,27 +16,26 @@ export function CardDemo() {
   ];
 
   return (
-    <YStack space="$4" alignItems="center" paddingHorizontal="$4" paddingVertical="$6">
-      <ResponsiveGrid>
-        {devsData.map((dev, index) => (
-          <DevsCards
-            key={index}
-            title={dev.title}
-            description={dev.description}
-            imageUri={dev.imageUri}
-            animation="bouncy"
-            size="$4"
-            scale={0.9}
-            hoverStyle={{ scale: 0.925 }}
-            pressStyle={{ scale: 0.875 }}
-          />
-        ))}
-      </ResponsiveGrid>
-    </YStack>
+    <ResponsiveGrid>
+      {devsData.map((dev, index) => (
+        <DevsCards
+          key={index}
+          title={dev.title}
+          description={dev.description}
+          imageUri={dev.imageUri}
+          animation="bouncy"
+          size="$4"
+          scale={0.9}
+          hoverStyle={{ scale: 0.925 }}
+          pressStyle={{ scale: 0.875 }}
+        />
+      ))}
+    </ResponsiveGrid>
   );
 }
 
-export function DevsCards({ title, description, imageUri, ...props }: CardProps & { title: string; description: string; imageUri: string }) {
+// DevsCards Component
+export function DevsCards({ title, description, imageUri, ...props }) {
   return (
     <Link href={{ pathname: "/[dev]/", params: { dev: title.toLowerCase() } }}>
       <Card
@@ -70,7 +71,8 @@ export function DevsCards({ title, description, imageUri, ...props }: CardProps 
   );
 }
 
-export function ResponsiveGrid({ children }: { children: React.ReactNode }) {
+// ResponsiveGrid Component
+export function ResponsiveGrid({ children }) {
   return (
     <XStack
       justifyContent="center"
@@ -78,17 +80,13 @@ export function ResponsiveGrid({ children }: { children: React.ReactNode }) {
       paddingHorizontal="$2"
       paddingVertical="$4"
       space="$4"
-      $gtLg={{ width: '23%' }}  // 4 cards per row for extra-large screens
-      $lg={{ width: '30%' }}    // 3 cards per row for large screens
-      $md={{ width: '45%' }}    // 2 cards per row for medium screens
-      $sm={{ width: '100%' }}   // 1 card per row for small screens
-      $xs={{ width: '100%' }}   // 1 card per row for extra-small screens
     >
       {children}
     </XStack>
   );
 }
 
+// Styles for cards
 const styles = {
   cardContainer: {
     margin: 10, // Space between cards

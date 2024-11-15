@@ -1,125 +1,126 @@
-import type { CardProps } from 'tamagui';
-import { H2, H3, Button, Card, Image, Paragraph, XStack, YStack } from 'tamagui';
-import React, { useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
-import { useUser } from '@clerk/clerk-react';
+import { Button, Card, H2, Image, Paragraph, ScrollView, XStack, YStack } from 'tamagui';
+import { Link } from 'expo-router';
+import React from 'react';
+import { useUser } from '@clerk/clerk-expo';
 
-type Project = {
-  name: string;
-  description: string;
-  imageUri: string;
-  link: string;
-};
-
-export function DevProjects() {
-  const { user } = useUser();
-  const [projects, setProjects] = useState<Project[]>([]);
-
-  useEffect(() => {
-    if (user) {
-      const userProjects = user.unsafeMetadata?.projects as Project[] | undefined;
-      if (userProjects) {
-        setProjects(userProjects);
-      }
-    }
-  }, [user]);
-
+// Home Component
+const DevsProjectCard = () => {
   return (
-    <YStack space="$4" alignItems="center" paddingHorizontal="$4" paddingVertical="$6">
-      {/* Title Section */}
-      <H2 textAlign="center" color="$color" paddingBottom="$4">
-        Projects Showcase
+    <YStack flex={1} backgroundColor="$background" padding="$4" borderRadius="$4">
+      {/* Static Title */}
+      <H2 textAlign="center" color="$color" paddingVertical="$4">
+        My Projects
       </H2>
 
-      {/* Cards Container */}
-      <XStack
-        flexWrap="wrap"
-        justifyContent="center"
-        alignItems="center"
-        style={{ width: '100%' }}
-        space="$3"
-      >
-        {projects.map((project, index) => (
-          <ProjectCard
-            key={index}
-            project={project}
-            animation="bouncy"
-            size="$4"
-            scale={0.9}
-            hoverStyle={{ scale: 0.925 }}
-            pressStyle={{ scale: 0.875 }}
-            width="100%"
-            $sm={{ width: '100%', height: 300 }}
-            $md={{ width: '48%', height: 300 }}
-            $lg={{ width: '32%', height: 300 }}
-            $xl={{ width: '23%', height: 300 }}
-          />
-        ))}
-      </XStack>
+      {/* Scrollable Cards Section */}
+      <ScrollView>
+        <DevsProjectsCards />
+      </ScrollView>
     </YStack>
   );
-}
+};
 
-interface ProjectCardProps extends CardProps {
-  project: Project;
-}
+export default DevsProjectCard;
 
-export function ProjectCard({ project, ...props }: ProjectCardProps) {
+// DevsProjectCards Component
+export function DevsProjectsCards() {
+  const { user } = useUser();
+
+  // Fetch projects from Clerk's unsafe metadata
+  const devsData = user?.unsafeMetadata?.projects || [];
+
   return (
-    <Card style={styles.cardContainer} elevate size="$4" bordered {...props}>
-      <Card.Header padded style={styles.cardHeader}>
-        <H3>{project.name}</H3>
-        <Paragraph theme="alt2">{project.description}</Paragraph>
-      </Card.Header>
-
-      <Card.Background style={styles.cardImageContainer}>
-        <Image
-          resizeMode="contain"
-          source={{
-            width: 150,
-            height: 150,
-            uri: project.imageUri,
-          }}
-          style={styles.cardImage}
+    <ResponsiveGrid>
+      {devsData.map((dev, index) => (
+        <DevsCards
+          key={index}
+          title={dev.title}
+          description={dev.description}
+          imageUri={dev.imageUri}
+          animation="bouncy"
+          size="$4"
+          scale={0.9}
+          hoverStyle={{ scale: 0.925 }}
+          pressStyle={{ scale: 0.875 }}
         />
-      </Card.Background>
-
-      <Card.Footer padded style={styles.cardFooter}>
-        <Button
-          marginTop="$2"
-          borderRadius="$10"
-          size="$3"
-          theme="blue"
-          onPress={() => window.open(project.link, '_blank')}
-        >
-          View Project
-        </Button>
-      </Card.Footer>
-    </Card>
+      ))}
+    </ResponsiveGrid>
   );
 }
 
-const styles = StyleSheet.create({
+// DevsCards Component
+export function DevsCards({ title, description, imageUri, ...props }) {
+  return (
+    <Link href={{ pathname: "/[dev]/", params: { dev: title.toLowerCase() } }}>
+      <Card
+        elevate
+        size="$10"
+        bordered
+        {...props}
+        style={styles.cardContainer}
+      >
+        <Card.Header padded>
+          <H2 textAlign="center">{title}</H2>
+          <Paragraph theme="alt2" textAlign="center">{description}</Paragraph>
+        </Card.Header>
+        <Card.Background>
+          <Image
+            resizeMode="contain"
+            alignSelf="center"
+            source={{
+              width: 250,
+              height: 250,
+              uri: imageUri,
+            }}
+            style={styles.cardImage}
+          />
+        </Card.Background>
+        <Card.Footer padded>
+          <XStack justifyContent="center">
+            <Button borderRadius="$10">Purchase</Button>
+          </XStack>
+        </Card.Footer>
+      </Card>
+    </Link>
+  );
+}
+
+// ResponsiveGrid Component without MediaQuery
+export function ResponsiveGrid({ children }) {
+  return (
+    <XStack
+      justifyContent="center"
+      flexWrap="wrap"
+      paddingHorizontal="$2"
+      paddingVertical="$4"
+      space="$4"
+    >
+      {children.map((child, index) => (
+        <YStack
+          key={index}
+          width="100%"
+          $gtLg={{ width: '23%' }}  // 4 cards per row for extra-large screens
+          $lg={{ width: '30%' }}    // 3 cards per row for large screens
+          $md={{ width: '30%' }}    // 3 cards per row for medium screens
+          $sm={{ width: '45%' }}    // 2 cards per row for small screens
+          $xs={{ width: '100%' }}   // 1 card per row for extra-small screens
+        >
+          {child}
+        </YStack>
+      ))}
+    </XStack>
+  );
+}
+
+// Styles for cards
+const styles = {
   cardContainer: {
-    borderRadius: 20,
-    overflow: 'hidden',
-    alignItems: 'center',
-    justifyContent: 'center',
-    textAlign: 'center',
-  },
-  cardHeader: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  cardImageContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    margin: 10, // Space between cards
+    borderRadius: 15, // Rounded corners for cards
+    overflow: 'hidden', // Ensures rounded corners for all content inside the card
+    width: '100%', // Default full-width for cards
   },
   cardImage: {
-    marginBottom: 8,
+    marginVertical: 8, // Vertical space around the image
   },
-  cardFooter: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+};

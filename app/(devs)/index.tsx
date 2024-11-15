@@ -1,23 +1,25 @@
-import { ScrollView, YStack, H2 } from 'tamagui';
+import { ScrollView, YStack, H2, XStack } from 'tamagui';
 import React from 'react';
-import { CardDemo } from 'components/DevsCards'; // Import the CardDemo component
+import  {DevsCardProfiles}  from 'components/DevsCards'; // Import the DevsProfileCards component
 
 const Home = () => {
   return (
-    <>
-      <ScrollView
-        maxHeight="100%"
-        // width="100%"
-        backgroundColor="$background"
-        padding="$4"
-        borderRadius="$4"
-      > 
-         <YStack space="$4" alignItems="center">
-          <H2 textAlign="center" color="$color">Developer Showcase</H2>
-          <CardDemo /> {/* Render the CardDemo component with cards */}
-    </YStack> 
-         </ScrollView >
-    </>
+    <YStack
+      backgroundColor="$background"
+      padding="$4"
+      borderRadius="$4"
+      flex={1}
+    >
+      {/* Static Title */}
+      <H2 textAlign="center" color="$color" paddingVertical="$4">
+        Developer Showcase
+      </H2>
+
+      {/* Scrollable Cards */}
+      <ScrollView>
+        <DevsCardProfiles /> {/* Render the CardDemo component with cards */}
+      </ScrollView>
+    </YStack>
   );
 };
 
