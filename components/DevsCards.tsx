@@ -3,7 +3,6 @@ import { Button, Card, H2, Image, Paragraph, XStack, YStack } from 'tamagui';
 import { Link } from 'expo-router';
 import React from 'react';
 
-// CardDemo Component
 export function CardDemo() {
   const devsData = [
     { title: 'Dev101', description: 'Now available', imageUri: 'https://image.pngaaa.com/743/6496743-middle.png' },
@@ -35,7 +34,6 @@ export function CardDemo() {
   );
 }
 
-// DevsCards Component
 export function DevsCards({ title, description, imageUri, ...props }: CardProps & { title: string; description: string; imageUri: string }) {
   return (
     <Link href={{ pathname: "/[dev]/", params: { dev: title.toLowerCase() } }}>
@@ -55,8 +53,8 @@ export function DevsCards({ title, description, imageUri, ...props }: CardProps 
             resizeMode="contain"
             alignSelf="center"
             source={{
-              width: 300,
-              height: 300,
+              width: 250,
+              height: 250,
               uri: imageUri,
             }}
             style={styles.cardImage}
@@ -72,36 +70,33 @@ export function DevsCards({ title, description, imageUri, ...props }: CardProps 
   );
 }
 
-// ResponsiveGrid Component
 export function ResponsiveGrid({ children }: { children: React.ReactNode }) {
   return (
     <XStack
-      justifyContent="space-between"
+      justifyContent="center"
       flexWrap="wrap"
       paddingHorizontal="$2"
       paddingVertical="$4"
       space="$4"
-      // Responsive widths for each card
-      $gtLg={{ width: '32%' }}  // 4 cards per row for extra large screens
-      $lg={{ width: '32%' }}    // 4 cards per row for large screens
-      $md={{ width: '32%' }}    // 3 cards per row for medium screens
-      $sm={{ width: '48%' }}    // 2 cards per row for small screens
-      $xs={{ width: '100%' }}   // 1 card per row for extra small screens
+      $gtLg={{ width: '23%' }}  // 4 cards per row for extra-large screens
+      $lg={{ width: '30%' }}    // 3 cards per row for large screens
+      $md={{ width: '45%' }}    // 2 cards per row for medium screens
+      $sm={{ width: '100%' }}   // 1 card per row for small screens
+      $xs={{ width: '100%' }}   // 1 card per row for extra-small screens
     >
       {children}
     </XStack>
   );
 }
 
-// Styles for cards
 const styles = {
   cardContainer: {
-    margin: '10px', // Space between cards
+    margin: 10, // Space between cards
     borderRadius: 15, // Rounded corners for cards
-    overflow: 'hidden', // Rounded corners for all content inside the card
-    width: '100%', // Default width for cards
+    overflow: 'hidden', // Ensures rounded corners for all content inside the card
+    width: '100%', // Default full-width for cards
   },
   cardImage: {
-    marginBottom: 8, // Space below the image
+    marginVertical: 8, // Vertical space around the image
   },
 };

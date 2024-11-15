@@ -8,7 +8,7 @@ type Project = {
   name: string;
   description: string;
   imageUri: string;
-  link: string; // Link to the project
+  link: string;
 };
 
 export function DevProjects() {
@@ -17,11 +17,10 @@ export function DevProjects() {
 
   useEffect(() => {
     if (user) {
-      // Fetch projects from Clerk's unsafeMetadata
       const userProjects = user.unsafeMetadata?.projects as Project[] | undefined;
       if (userProjects) {
         setProjects(userProjects);
-      }s
+      }
     }
   }, [user]);
 
@@ -36,8 +35,9 @@ export function DevProjects() {
       <XStack
         flexWrap="wrap"
         justifyContent="center"
-        style={{ height: '100%' }}
-        space
+        alignItems="center"
+        style={{ width: '100%' }}
+        space="$3"
       >
         {projects.map((project, index) => (
           <ProjectCard
@@ -45,13 +45,13 @@ export function DevProjects() {
             project={project}
             animation="bouncy"
             size="$4"
-            width="100%"
             scale={0.9}
             hoverStyle={{ scale: 0.925 }}
             pressStyle={{ scale: 0.875 }}
-            $sm={{ width: '90%', height: 300 }}
-            $md={{ width: '45%', height: 300 }}
-            $lg={{ width: '23%', height: 300 }}
+            width="100%"
+            $sm={{ width: '100%', height: 300 }}
+            $md={{ width: '48%', height: 300 }}
+            $lg={{ width: '32%', height: 300 }}
             $xl={{ width: '23%', height: 300 }}
           />
         ))}
@@ -85,7 +85,13 @@ export function ProjectCard({ project, ...props }: ProjectCardProps) {
       </Card.Background>
 
       <Card.Footer padded style={styles.cardFooter}>
-        <Button marginTop="$2" borderRadius="$10" size="$3" theme="blue" onPress={() => window.open(project.link, '_blank')}>
+        <Button
+          marginTop="$2"
+          borderRadius="$10"
+          size="$3"
+          theme="blue"
+          onPress={() => window.open(project.link, '_blank')}
+        >
           View Project
         </Button>
       </Card.Footer>
@@ -95,25 +101,25 @@ export function ProjectCard({ project, ...props }: ProjectCardProps) {
 
 const styles = StyleSheet.create({
   cardContainer: {
-    borderRadius: 20, // Rounded corners
-    overflow: 'hidden', // Ensures rounded corners work for all content inside the card
-    alignItems: 'center', // Center content horizontally
-    justifyContent: 'center', // Center content vertically
-    textAlign: 'center', // Center text
+    borderRadius: 20,
+    overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
   },
   cardHeader: {
-    alignItems: 'center', // Center header content
-    justifyContent: 'center', // Center header content
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   cardImageContainer: {
-    alignItems: 'center', // Center image container
-    justifyContent: 'center', // Center image container
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   cardImage: {
-    marginBottom: 8, // Space below the image
+    marginBottom: 8,
   },
   cardFooter: {
-    alignItems: 'center', // Center footer content
-    justifyContent: 'center', // Center footer content
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
