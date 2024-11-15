@@ -2,6 +2,7 @@
   "name": "devs101",
   "main": "expo-router/entry",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "upgrade:tamagui": "yarn up '*tamagui*'@latest '@tamagui/*'@latest",
     "upgrade:tamagui:canary": "yarn up '*tamagui*'@canary '@tamagui/*'@canary",
@@ -62,9 +63,5 @@
     "typescript": "^5.5.2"
   },
   "private": true,
-  "packageManager": "yarn@4.4.0",
-  {
-    "type": "module",
-
-  }
+  "packageManager": "yarn@4.4.0"
 }
