@@ -21,7 +21,7 @@ export function DevProjects() {
       const userProjects = user.unsafeMetadata?.projects as Project[] | undefined;
       if (userProjects) {
         setProjects(userProjects);
-      }
+      }s
     }
   }, [user]);
 
