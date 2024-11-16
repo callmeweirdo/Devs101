@@ -1,8 +1,9 @@
-import type { CardProps } from 'tamagui';
+import { useUser } from '@clerk/clerk-expo';
 import { H2, H3, Button, Card, Image, Paragraph, Progress, XStack, YStack } from 'tamagui';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 
+// SkillCard Component Props
 type Skill = {
   name: string;
   description: string;
@@ -10,58 +11,17 @@ type Skill = {
   proficiency: number; // Represented as a percentage
 };
 
-const skills: Skill[] = [
-  {
-    name: 'JavaScript',
-    description: 'Advanced in ES6+, asynchronous programming, and frameworks like React.',
-    imageUri: 'https://cdn-icons-png.flaticon.com/512/5968/5968292.png',
-    proficiency: 90,
-  },
-  {
-    name: 'React Native',
-    description: 'Experienced in building cross-platform mobile applications.',
-    imageUri: 'https://cdn-icons-png.flaticon.com/512/3334/3334886.png',
-    proficiency: 80,
-  },
-  {
-    name: 'Blockchain',
-    description: 'Skilled in developing and deploying smart contracts with Solidity.',
-    imageUri: 'https://cdn-icons-png.flaticon.com/512/197/197600.png',
-    proficiency: 70,
-  },
-  {
-    name: 'Git & GitHub',
-    description: 'Proficient in version control, collaboration, and Git workflows.',
-    imageUri: 'https://cdn-icons-png.flaticon.com/512/25/25231.png',
-    proficiency: 85,
-  },
-  {
-    name: 'Node.js',
-    description: 'Backend development with Express.js, REST APIs, and database integration.',
-    imageUri: 'https://cdn-icons-png.flaticon.com/512/919/919825.png',
-    proficiency: 75,
-  },
-  {
-    name: 'Web3',
-    description: 'Knowledge of Web3.js and blockchain-based applications.',
-    imageUri: 'https://cdn-icons-png.flaticon.com/512/876/876784.png',
-    proficiency: 65,
-  },
-  {
-    name: 'UI/UX Design',
-    description: 'Creating user-friendly interfaces with Figma and Adobe XD.',
-    imageUri: 'https://cdn-icons-png.flaticon.com/512/888/888887.png',
-    proficiency: 60,
-  },
-  {
-    name: 'Docker',
-    description: 'Containerization for application deployment and scaling.',
-    imageUri: 'https://cdn-icons-png.flaticon.com/512/919/919853.png',
-    proficiency: 70,
-  },
-];
+interface SkillCardProps extends CardProps {
+  skill: Skill;
+}
 
+// Main DevSkill Component
 export function DevSkill() {
+  const { user } = useUser();
+
+  // Retrieve skills from Clerk's unsafeMetadata
+  const skills: Skill[] = user?.unsafeMetadata?.skills || [];
+
   return (
     <YStack space="$4" alignItems="center" paddingHorizontal="$4" paddingVertical="$6">
       {/* Title Section */}
@@ -73,23 +33,24 @@ export function DevSkill() {
       <XStack
         flexWrap="wrap"
         justifyContent="center"
-        style={{ height: '60%' }}
-        space
+        gap="$6" // Adds space between rows and columns
+        $sm={{ width: '100%' }}
+        $md={{ width: '100%' }}
+        $lg={{ width: '100%' }}
+        $xl={{ width: '100%' }}
       >
         {skills.map((skill, index) => (
           <SkillCard
             key={index}
             skill={skill}
             animation="bouncy"
-            size="$4"
-            width="100%"
-            scale={0.9}
-            hoverStyle={{ scale: 0.925 }}
-            pressStyle={{ scale: 0.875 }}
-            $sm={{ width: '90%', height: 270 }}
-            $md={{ width: '45%', height: 270 }}
-            $lg={{ width: '23%', height: 270 }}
-            $xl={{ width: '23%', height: 270 }}
+            size="$5"
+            hoverStyle={{ scale: 0.98 }}
+            pressStyle={{ scale: 0.95 }}
+            $sm={{ width: '100%', height: 300 }}
+            $md={{ width: '48%', height: 300 }}
+            $lg={{ width: '23%', height: 350 }} // 4 cards per row on large screens
+            $xl={{ width: '23%', height: 350 }} // 4 cards per row on extra-large screens
           />
         ))}
       </XStack>
@@ -97,15 +58,12 @@ export function DevSkill() {
   );
 }
 
-interface SkillCardProps extends CardProps {
-  skill: Skill;
-}
-
+// SkillCard Component
 export function SkillCard({ skill, ...props }: SkillCardProps) {
   return (
-    <Card style={styles.cardContainer} elevate size="$4" bordered {...props}>
+    <Card style={styles.cardContainer} elevate size="$5" bordered {...props}>
       <Card.Header padded style={styles.cardHeader}>
-        <H3>{skill.name}</H3>
+        <H3>{skill.skill}</H3>
         <Paragraph theme="alt2">{skill.description}</Paragraph>
       </Card.Header>
 
@@ -113,9 +71,9 @@ export function SkillCard({ skill, ...props }: SkillCardProps) {
         <Image
           resizeMode="contain"
           source={{
-            width: 80,
-            height: 80,
-            uri: skill.imageUri,
+            width: 100,
+            height: 100,
+            uri: skill.imageUrl,
           }}
           style={styles.cardImage}
         />
@@ -145,10 +103,12 @@ const styles = StyleSheet.create({
   cardHeader: {
     alignItems: 'center', // Center header content
     justifyContent: 'center', // Center header content
+    paddingBottom: 8,
   },
   cardImageContainer: {
     alignItems: 'center', // Center image container
     justifyContent: 'center', // Center image container
+    paddingVertical: 10,
   },
   cardImage: {
     marginBottom: 8, // Space below the image

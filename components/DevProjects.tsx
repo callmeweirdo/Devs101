@@ -13,9 +13,9 @@ const DevsProjectCard = () => {
       </H2>
 
       {/* Scrollable Cards Section */}
-      <ScrollView>
+      {/* <ScrollView> */}
         <DevsProjectsCards />
-      </ScrollView>
+      {/* </ScrollView> */}
     </YStack>
   );
 };
@@ -27,16 +27,17 @@ export function DevsProjectsCards() {
   const { user } = useUser();
 
   // Fetch projects from Clerk's unsafe metadata
-  const devsData = user?.unsafeMetadata?.projects || [];
+  const devsProjectData = user?.unsafeMetadata?.projects || [];
 
   return (
     <ResponsiveGrid>
-      {devsData.map((dev, index) => (
+      {devsProjectData.map((dev, index) => (
         <DevsCards
           key={index}
-          title={dev.title}
+          name={dev.name}
           description={dev.description}
-          imageUri={dev.imageUri}
+          imageUrl={dev.imageUrl}
+          link={dev.link}
           animation="bouncy"
           size="$4"
           scale={0.9}
@@ -49,9 +50,11 @@ export function DevsProjectsCards() {
 }
 
 // DevsCards Component
-export function DevsCards({ title, description, imageUri, ...props }) {
+export function DevsCards({ name, description, imageUrl, link, ...props }) {
+  const devTitle = name ? name.toLowerCase() : 'untitled';
+
   return (
-    <Link href={{ pathname: "/[dev]/", params: { dev: title.toLowerCase() } }}>
+    <Link href={link}>
       <Card
         elevate
         size="$10"
@@ -60,7 +63,7 @@ export function DevsCards({ title, description, imageUri, ...props }) {
         style={styles.cardContainer}
       >
         <Card.Header padded>
-          <H2 textAlign="center">{title}</H2>
+          <H2 textAlign="center">{name || 'Untitled'}</H2> {/* Display 'Untitled' if name is undefined */}
           <Paragraph theme="alt2" textAlign="center">{description}</Paragraph>
         </Card.Header>
         <Card.Background>
@@ -70,7 +73,7 @@ export function DevsCards({ title, description, imageUri, ...props }) {
             source={{
               width: 250,
               height: 250,
-              uri: imageUri,
+              uri: imageUrl,
             }}
             style={styles.cardImage}
           />
