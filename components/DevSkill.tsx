@@ -44,7 +44,7 @@ export function DevSkill() {
             key={index}
             skill={skill}
             animation="bouncy"
-            size="$5"
+            size="$2"
             hoverStyle={{ scale: 0.98 }}
             pressStyle={{ scale: 0.95 }}
             $sm={{ width: '100%', height: 300 }}
@@ -61,7 +61,7 @@ export function DevSkill() {
 // SkillCard Component
 export function SkillCard({ skill, ...props }: SkillCardProps) {
   return (
-    <Card style={styles.cardContainer} elevate size="$5" bordered {...props}>
+    <Card style={styles.cardContainer} elevate size="$3" bordered {...props}>
       <Card.Header padded style={styles.cardHeader}>
         <H3>{skill.skill}</H3>
         <Paragraph theme="alt2">{skill.description}</Paragraph>
