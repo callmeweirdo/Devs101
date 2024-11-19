@@ -1,28 +1,47 @@
-import { Button, Card, H2, Image, Paragraph, ScrollView, XStack, YStack } from 'tamagui';
+import React, { useEffect, useState } from 'react';
+import { Button, Card, H2, Image, Paragraph, XStack } from 'tamagui';
 import { Link } from 'expo-router';
-import React from 'react';
-
-
+import { clerkClient } from '@clerk/clerk-expo'; // Ensure this is installed and configured
 
 // DevsProfileCards Component
 export function DevsCardProfiles() {
-  const devsData = [
-    { title: 'Dev101', description: 'Now available', imageUri: 'https://image.pngaaa.com/743/6496743-middle.png' },
-    { title: 'Dev102', description: 'Available soon', imageUri: 'https://image.pngaaa.com/743/6496743-middle.png' },
-    { title: 'Dev103', description: 'Limited slots', imageUri: 'https://image.pngaaa.com/743/6496743-middle.png' },
-    { title: 'Dev104', description: 'Now available', imageUri: 'https://image.pngaaa.com/743/6496743-middle.png' },
-    { title: 'Dev105', description: 'Coming soon', imageUri: 'https://image.pngaaa.com/743/6496743-middle.png' },
-    { title: 'Dev106', description: 'Now available', imageUri: 'https://image.pngaaa.com/743/6496743-middle.png' },
-  ];
+  const [usersData, setUsersData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const users = await clerkClient.users.getUserList(); // Fetches all users from Clerk
+        const formattedUsers = users.map(user => ({
+          id: user.id, // Clerk's unique user ID
+          title: user.username || `${user.firstName || 'Anonymous'} ${user.lastName || ''}`,
+          description: user.emailAddresses?.[0]?.emailAddress || 'No email available',
+          imageUri: user.profileImageUrl || 'https://via.placeholder.com/250',
+        }));
+        setUsersData(formattedUsers);
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error fetching users from Clerk:', error);
+        setIsLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
+  if (isLoading) {
+    return <Paragraph>Loading...</Paragraph>;
+  }
 
   return (
     <ResponsiveGrid>
-      {devsData.map((dev, index) => (
+      {usersData.map(user => (
         <DevsCards
-          key={index}
-          title={dev.title}
-          description={dev.description}
-          imageUri={dev.imageUri}
+          key={user.id}
+          id={user.id}
+          title={user.title}
+          description={user.description}
+          imageUri={user.imageUri}
           animation="bouncy"
           size="$4"
           scale={0.9}
@@ -35,9 +54,9 @@ export function DevsCardProfiles() {
 }
 
 // DevsCards Component
-export function DevsCards({ title, description, imageUri, ...props }) {
+export function DevsCards({ id, title, description, imageUri, ...props }) {
   return (
-    <Link href={{ pathname: "/[dev]/", params: { dev: title.toLowerCase() } }}>
+    <Link href={{ pathname: `/developer/${id}` }}>
       <Card
         elevate
         size="$4"
@@ -63,7 +82,7 @@ export function DevsCards({ title, description, imageUri, ...props }) {
         </Card.Background>
         <Card.Footer padded>
           <XStack justifyContent="center">
-            <Button borderRadius="$10">Purchase</Button>
+            <Button borderRadius="$10">View Profile</Button>
           </XStack>
         </Card.Footer>
       </Card>
