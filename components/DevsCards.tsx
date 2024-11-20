@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, H2, Image, Paragraph, XStack } from 'tamagui';
 import { Link } from 'expo-router';
-import { clerkClient } from '@clerk/clerk-expo'; // Ensure this is installed and configured
+import { clerkClient } from '@clerk/clerk-expo'; // Ensure this is properly configured
 
 // DevsProfileCards Component
 export function DevsCardProfiles() {
@@ -11,9 +11,9 @@ export function DevsCardProfiles() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const users = await clerkClient.users.getUserList(); // Fetches all users from Clerk
+        const users = await clerkClient().users.getUserList(); // Fetch users from Clerk
         const formattedUsers = users.map(user => ({
-          id: user.id, // Clerk's unique user ID
+          id: user.id, // Clerk user ID
           title: user.username || `${user.firstName || 'Anonymous'} ${user.lastName || ''}`,
           description: user.emailAddresses?.[0]?.emailAddress || 'No email available',
           imageUri: user.profileImageUrl || 'https://via.placeholder.com/250',
