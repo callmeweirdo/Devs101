@@ -39,22 +39,57 @@ export function DevSkill() {
         $lg={{ width: '100%' }}
         $xl={{ width: '100%' }}
       >
-        {skills.map((skill, index) => (
-          <SkillCard
-            key={index}
-            skill={skill}
-            animation="bouncy"
-            size="$2"
-            hoverStyle={{ scale: 0.98 }}
-            pressStyle={{ scale: 0.95 }}
-            $sm={{ width: '100%', height: 300 }}
-            $md={{ width: '48%', height: 300 }}
-            $lg={{ width: '23%', height: 350 }} // 4 cards per row on large screens
-            $xl={{ width: '23%', height: 350 }} // 4 cards per row on extra-large screens
-          />
-        ))}
+        {skills.length === 0 ? (
+          // If no skills, display a single "No Skills" card
+          <NoSkillsCard />
+        ) : (
+          skills.map((skill, index) => (
+            <SkillCard
+              key={index}
+              skill={skill}
+              animation="bouncy"
+              size="$2"
+              hoverStyle={{ scale: 0.98 }}
+              pressStyle={{ scale: 0.95 }}
+              $sm={{ width: '100%', height: 300 }}
+              $md={{ width: '48%', height: 300 }}
+              $lg={{ width: '23%', height: 350 }} // 4 cards per row on large screens
+              $xl={{ width: '23%', height: 350 }} // 4 cards per row on extra-large screens
+            />
+          ))
+        )}
       </XStack>
     </YStack>
+  );
+}
+
+// NoSkillsCard Component (Displays when no skills are available)
+export function NoSkillsCard() {
+  return (
+    <Card style={styles.cardContainer} elevate size="$3" bordered>
+      <Card.Header padded style={styles.cardHeader}>
+        <H3>No Skills Available</H3>
+        <Paragraph theme="alt2">You don't have any skills listed yet.</Paragraph>
+      </Card.Header>
+
+      <Card.Background style={styles.cardImageContainer}>
+        <Image
+          resizeMode="contain"
+          source={{
+            width: 100,
+            height: 100,
+            uri: 'https://via.placeholder.com/150', // Placeholder image for no skills
+          }}
+          style={styles.cardImage}
+        />
+      </Card.Background>
+
+      <Card.Footer padded style={styles.cardFooter}>
+        <XStack alignItems="center" justifyContent="center" style={styles.footerContent}>
+          <Paragraph>No skills have been added to your profile yet.</Paragraph>
+        </XStack>
+      </Card.Footer>
+    </Card>
   );
 }
 
@@ -63,7 +98,7 @@ export function SkillCard({ skill, ...props }: SkillCardProps) {
   return (
     <Card style={styles.cardContainer} elevate size="$3" bordered {...props}>
       <Card.Header padded style={styles.cardHeader}>
-        <H3>{skill.skill}</H3>
+        <H3>{skill.name}</H3>
         <Paragraph theme="alt2">{skill.description}</Paragraph>
       </Card.Header>
 
@@ -73,7 +108,7 @@ export function SkillCard({ skill, ...props }: SkillCardProps) {
           source={{
             width: 100,
             height: 100,
-            uri: skill.imageUrl,
+            uri: skill.imageUri,
           }}
           style={styles.cardImage}
         />

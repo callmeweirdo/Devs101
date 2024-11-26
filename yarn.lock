@@ -1185,6 +1185,15 @@
     qrcode.react "3.1.0"
     regenerator-runtime "0.13.11"
 
+"@clerk/clerk-react@^5.17.0":
+  version "5.17.0"
+  resolved "https://registry.npmjs.org/@clerk/clerk-react/-/clerk-react-5.17.0.tgz"
+  integrity sha512-++PSiayBaK877XTjbTZzyqommVlxnFNevxCKsOXbq8+KENAyYkUZ6LJpyoWjfjg1fnKq6oUFax+TwnyOyyxoqw==
+  dependencies:
+    "@clerk/shared" "2.17.0"
+    "@clerk/types" "4.35.0"
+    tslib "2.4.1"
+
 "@clerk/clerk-react@5.16.0":
   version "5.16.0"
   resolved "https://registry.npmjs.org/@clerk/clerk-react/-/clerk-react-5.16.0.tgz"
@@ -1222,10 +1231,29 @@
     std-env "^3.7.0"
     swr "^2.2.0"
 
+"@clerk/shared@2.17.0":
+  version "2.17.0"
+  resolved "https://registry.npmjs.org/@clerk/shared/-/shared-2.17.0.tgz"
+  integrity sha512-Jn/oBGjGfQQJIiMMf6Y0puC62R0rL1l/gLoPWnO6vNlCBzuFHGcsSTCWWDpmAXfyVwY7wJ7Dcq/B1UEsKeJ8zQ==
+  dependencies:
+    "@clerk/types" "4.35.0"
+    dequal "2.0.3"
+    glob-to-regexp "0.4.1"
+    js-cookie "3.0.5"
+    std-env "^3.7.0"
+    swr "^2.2.0"
+
 "@clerk/types@4.34.0":
   version "4.34.0"
   resolved "https://registry.npmjs.org/@clerk/types/-/types-4.34.0.tgz"
   integrity sha512-4ghDvf80/sFlpx5HnmIl3vW7SOqEaTDwyKAw64H/E2ahgGUMk+qLVpxnBumTpowq+bGjfMVwbneDQOhtmYidoQ==
+  dependencies:
+    csstype "3.1.1"
+
+"@clerk/types@4.35.0":
+  version "4.35.0"
+  resolved "https://registry.npmjs.org/@clerk/types/-/types-4.35.0.tgz"
+  integrity sha512-sBSYCCIXcwI+JHQRqBtskw10+rQ1NcA9w1G6ndnS48F5C+if6xI9OpYaaDjhhvzLjBeZFydKAOhe35mgC7bmoA==
   dependencies:
     csstype "3.1.1"
 

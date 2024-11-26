@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@clerk/clerk-expo": "^2.2.29",
+    "@clerk/clerk-react": "^5.17.0",
     "@react-native-community/netinfo": "^11.4.1",
     "@react-navigation/native": "^6.1.17",
     "@tamagui/config": "^1.115.4",
